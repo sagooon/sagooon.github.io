@@ -40,7 +40,6 @@
     <link href="favicons/IMG_20231107_230437_35.png" rel="shortcut icon"
         type="image/x-icon">
     <link href="favicons/IMG_20231107_230437_608.png" rel="apple-touch-icon">
-    <!-- Analytics -->
     <script defer data-domain="sagooon.github.io" src="js/js-script.js"></script>
 
     <style>
@@ -48,20 +47,48 @@
             -webkit-font-smoothing: antialiased;
             -moz-font-smoothing: antialiased;
             -o-font-smoothing: antialiased;
+            /* Dark Theme Overrides */
+            background-color: #000000 !important;
+            color: #ffffff !important;
         }
 
-        /*Text Selection Color*/
+        /* Enforce white text for common elements */
+        h1, h2, h3, p, div, .paragraph, .h2, .h3, .btn_text {
+            color: #ffffff;
+        }
+
+        /* Link visibility on dark background */
+        a {
+            color: #ffffff;
+            text-decoration-color: #ffffff;
+        }
+
+        /* Selection colors */
         ::selection {
-            background: #080808;
-            color: #e6e6e6;
+            background: #ffffff;
+            color: #000000;
         }
 
         ::-moz-selection {
-            background: #080808;
-            color: #e6e6e6;
+            background: #ffffff;
+            color: #000000;
         }
 
-        /*Reset apple form styles*/
+        /* Adjust sections and cards for dark mode */
+        .section.u-bg-beige {
+            background-color: #111111 !important;
+        }
+
+        .project-card {
+            background-color: #111111;
+            border: 1px solid #333333;
+        }
+
+        .navbar, .footer {
+            background-color: #000000;
+        }
+
+        /* Reset apple form styles */
         input,
         textarea,
         select {
@@ -70,6 +97,9 @@
             appearance: none;
             border-radius: 0;
             background-image: none;
+            background-color: #1a1a1a;
+            color: white;
+            border: 1px solid #333;
         }
     </style>
 </head>
@@ -102,7 +132,7 @@
                 font-size: 50%;
                 bottom: 3px;
                 padding-left: 10px;
-                color: #a39781;
+                color: #ffffff;
             }
 
             [data-page="graveyard"] h2 {
@@ -118,8 +148,8 @@
         <style>
             .project-card:hover {
                 .btn {
-                    border-color: var(--swatch--brown-shade-2);
-                    color: var(--swatch--brown-shade-2);
+                    border-color: #ffffff;
+                    color: #ffffff;
                 }
             }
         </style>
@@ -234,13 +264,7 @@
                                     <p class="paragraph"> Taking giant leaps, putting mankind to space &amp; interplanetary.</p>
                                     <div class="btn">
                                         <div class="btn_text">Unavailable at the moment</div>
-                                        <!-- <div class="btn_icon w-embed"><svg fill="currentColor" viewbox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                <path clip-rule="evenodd" fill-rule="evenodd"
-                                                    d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z">
-                                                </path>
-                                            </svg></div> -->
-                                    </div>
+                                        </div>
                                 </div><img
                                     src="images/651bc82SPACE.webp"
                                     loading="lazy" alt="" sizes="(max-width: 479px) 69vw, (max-width: 767px) 32vw, 35vw"
@@ -249,30 +273,6 @@
                             </a></div>
                     </div>
 
-                    <!-- <div class="col col-lg-6 col-sm-12">
-                        <div class="project-card-wrap"><a href="#" target="_blank"
-                                class="project-card w-inline-block">
-                                <div class="project-card_header">
-                                    <h2 class="h3">Show Them</h2>
-                                    <p class="paragraph">My upcoming debut and further major projects.</p>
-                                    <div class="btn">
-                                        <div class="btn_text">Stay tuned</div>
-                                        <div class="btn_icon w-embed"><svg fill="currentColor" viewbox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                <path clip-rule="evenodd" fill-rule="evenodd"
-                                                    d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z">
-                                                </path>
-                                            </svg></div>
-                                    </div>
-                                </div><img
-                                    src="images/651bc82c86167cb0e2890642-66bdcd2b45c44768ca0f98ea_thumb-show-them.jpg"
-                                    loading="lazy" alt="" sizes="(max-width: 479px) 86vw, (max-width: 767px) 90vw, 43vw"
-                                    srcset="https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/66bdcd2b45c44768ca0f98ea_thumb-show-them-p-500.jpg 500w, https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/66bdcd2b45c44768ca0f98ea_thumb-show-them-p-800.jpg 800w, https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/66bdcd2b45c44768ca0f98ea_thumb-show-them.jpg 960w"
-                                    class="project-card_image">
-                            </a></div>
-                    </div> -->
-<!-- 
-                    abandoned cards
                     <div class="col col-lg-6 col-sm-12">
                         <div class="project-card-wrap"><a href="https://yo.fm" target="_blank"
                                 class="project-card w-inline-block">
@@ -339,11 +339,11 @@
                                     srcset="https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/651bcffc268ddb173121a326_project-lpht-p-500.jpg 500w, https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/651bcffc268ddb173121a326_project-lpht.jpg 960w"
                                     class="project-card_image">
                             </a></div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </section>
-        <!-- <section class="section u-bg-beige">
+        <section class="section u-bg-beige">
             <div class="container is-narrow">
                 <div class="blog-list-wrap">
                     <div class="section-title">Recent blogs</div>
@@ -381,9 +381,9 @@
                     </a>
                 </div>
             </div>
-        </section> -->
+        </section>
         <footer class="footer">
-            <!-- <div class="footer_top"><img
+            <div class="footer_top"><img
                     src="images/651bc82c86167cb0e2890642-651bd8646f6e865b2f423eb8_Rob-Subscribe.jpg" loading="lazy"
                     sizes="(max-width: 767px) 100vw, (max-width: 991px) 40vw, 50vw"
                     srcset="https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/651bd8646f6e865b2f423eb8_Rob-Subscribe-p-500.jpg 500w, https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/651bd8646f6e865b2f423eb8_Rob-Subscribe-p-800.jpg 800w, https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/651bd8646f6e865b2f423eb8_Rob-Subscribe-p-1080.jpg 1080w, https://cdn.prod.website-files.com/651bc82c86167cb0e2890642/651bd8646f6e865b2f423eb8_Rob-Subscribe.jpg 1440w"
@@ -415,7 +415,7 @@
                             class="text-link">Preview a recent send</a>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <div class="footer_bottom">
                 <div class="container is-wide">
                     <div class="row row-justify-between">
@@ -423,8 +423,8 @@
                             <ul role="list" class="footer_links w-list-unstyled">
                                 <li class="footer_links_item"><a href="" aria-current="page"
                                         class="footer_link w--current">Saisagun Thapa</a></li>
-                                <!-- <li class="footer_links_item"><a href="blog.html" class="footer_link">Blog</a></li>
-                                <li class="footer_links_item"><a href="graveyard.html" class="footer_link">Graveyard</a> -->
+                                <li class="footer_links_item"><a href="blog.html" class="footer_link">Blog</a></li>
+                                <li class="footer_links_item"><a href="graveyard.html" class="footer_link">Graveyard</a>
                                 </li>
                             </ul>
                         </div>
@@ -519,7 +519,7 @@
                 font-size: 50%;
                 bottom: 3px;
                 padding-left: 10px;
-                color: #a39781;
+                color: #ffffff;
             }
 
             [data-page="graveyard"] h2 {
