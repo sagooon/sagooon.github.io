@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IoT Workshop — Beginner Session</title>
+  
+  <!-- Fonts and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  <style>
+    :root {
+      /* Base Colors */
+      --accent: #1D9E75;
+      --accent-light: #E1F5EE;
+      --accent-mid: #5DCAA5;
+      --warm: #BA7517;
+      --warm-light: #FAEEDA;
+      --blue: #185FA5;
+      --blue-light: #E6F1FB;
+      --coral: #993C1D;
+      --coral-light: #FAECE7;
+      --purple: #534AB7;
+      --purple-light: #EEEDFE;
+      --gray-light: #F1EFE8;
+
+      /* Theme Colors */
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --color-background-base: #FAFAFA;
+      --color-background-primary: #FFFFFF;
+      --color-background-secondary: #F4F4F5;
+      --color-border-secondary: #D4D4D8;
+      --color-border-tertiary: #E4E4E7;
+      --color-text-primary: #18181B;
+      --color-text-secondary: #52525B;
+      --color-text-tertiary: #A1A1AA;
+      
+      /* Radii */
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+    }
+
+    h2.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      background: var(--color-background-base); 
+      font-family: var(--font-sans);
+      color: var(--color-text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .workshop-header {
+      padding: 1.5rem 0 1rem;
+      border-bottom: 1px solid var(--color-border-tertiary);
+      margin-bottom: 1.5rem;
+    }
+    .workshop-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+    }
+    .workshop-meta {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .meta-badge i {
+      font-size: 18px;
+      color: var(--color-text-tertiary);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 0;
+    }
+    .timeline-spine {
+      position: absolute;
+      left: 72px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--color-border-tertiary) 100%);
+      opacity: 0.3;
+    }
+
+    .segment {
+      display: flex;
+      gap: 0;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .segment-time {
+      width: 64px;
+      flex-shrink: 0;
+      padding-top: 14px;
+      text-align: right;
+      padding-right: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.03em;
+    }
+
+    .segment-dot {
+      width: 16px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 16px;
+      z-index: 1;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.break { background: var(--color-border-secondary); }
+    .dot.problem { background: var(--coral); }
+    .dot.concept { background: var(--blue); }
+    .dot.hardware { background: var(--warm); }
+    .dot.software { background: var(--purple); }
+    .dot.demo { background: var(--accent); }
+    .dot.wrapup { background: var(--gray-light); border: 2px solid var(--color-border-secondary); }
+
+    .segment-body {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 16px 12px 20px;
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--color-border-tertiary);
+      background: var(--color-background-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .segment-body:hover {
+      border-color: var(--color-border-secondary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .segment-body.expanded {
+      border-color: var(--color-border-secondary);
+    }
+    .segment-body.break-card {
+      background: var(--color-background-secondary);
+      cursor: default;
+      box-shadow: none;
+    }
+    .segment-body.break-card:hover {
+      border-color: var(--color-border-tertiary);
+    }
+
+    .seg-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .seg-title-group { flex: 1; min-width: 0; }
+    .seg-label {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .lbl-problem  { background: var(--coral-light);  color: var(--coral); }
+    .lbl-concept  { background: var(--blue-light);   color: var(--blue); }
+    .lbl-hardware { background: var(--warm-light);   color: var(--warm); }
+    .lbl-software { background: var(--purple-light); color: var(--purple); }
+    .lbl-demo     { background: var(--accent-light); color: #0F6E56; }
+    .lbl-break    { background: var(--color-border-tertiary); color: var(--color-text-secondary); }
+    .lbl-wrapup   { background: var(--gray-light);   color: var(--color-text-secondary); }
+
+    .seg-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      line-height: 1.4;
+    }
+    .seg-duration {
+      font-size: 13px;
+      color: var(--color-text-tertiary);
+      white-space: nowrap;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .seg-details {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border-tertiary);
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    .seg-details.open { display: block; }
+
+    .seg-desc {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .bullets li {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .bullets li::before {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 8px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-border-secondary);
+    }
+    .bullets li strong {
+      color: var(--color-text-primary);
+      font-weight: 600;
+    }
+
+    .key-takeaway {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: var(--border-radius-md);
+      font-size: 13px;
+      line-height: 1.5;
+      border-left: 3px solid;
+      font-weight: 500;
+    }
+    .kt-problem  { background: var(--coral-light);  border-color: var(--coral);  color: var(--coral); }
+    .kt-concept  { background: var(--blue-light);   border-color: var(--blue);   color: var(--blue); }
+    .kt-hardware { background: var(--warm-light);   border-color: var(--warm);   color: var(--warm); }
+    .kt-software { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+    .kt-demo     { background: var(--accent-light); border-color: var(--accent); color: #0F6E56; }
+    .kt-wrapup   { background: var(--gray-light);   border-color: var(--color-border-secondary); color: var(--color-text-secondary); }
+
+    .chevron {
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      margin-top: 2px;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .expanded .chevron { transform: rotate(180deg); color: var(--color-text-primary); }
+
+    .progress-bar {
+      height: 4px;
+      border-radius: 99px;
+      background: var(--color-border-tertiary);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--color-background-primary);
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .stat-val {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      line-height: 1.2;
+    }
+    .stat-lbl {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ask-btn {
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--color-border-secondary);
+      background: var(--color-background-primary);
+      color: var(--color-text-secondary);
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .ask-btn:hover { 
+      background: var(--color-background-secondary); 
+      color: var(--color-text-primary);
+      border-color: var(--color-text-tertiary);
+    }
+
+    .footer-meta {
+      margin-top: 2rem; 
+      padding-top: 1.5rem; 
+      border-top: 1px solid var(--color-border-tertiary); 
+      font-size: 13px; 
+      color: var(--color-text-tertiary); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      flex-wrap: wrap; 
+      gap: 12px;
+    }
+
+    /* Toast Notification for UI/UX */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: #18181B;
+      color: #FFFFFF;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards, fadeOut 0.3s ease 2.5s forwards;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container { padding: 20px 16px; }
+      .workshop-title { font-size: 20px; }
+      .segment-time { width: 50px; font-size: 11px; padding-right: 8px; }
+      .timeline-spine { left: 56px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 class="sr-only">IoT Beginner Workshop — 1.5 hour session timeline with 8 segments covering problem framing, concepts, hardware, protocols, software, live demo, and wrap-up</h2>
+
+  <div class="workshop-header">
+    <div class="workshop-title">IoT Workshop — Beginner Session</div>
+    <div class="workshop-meta">
+      <span class="meta-badge"><i class="ti ti-clock" aria-hidden="true"></i> 90 minutes total</span>
+      <span class="meta-badge"><i class="ti ti-users" aria-hidden="true"></i> Beginners</span>
+      <span class="meta-badge"><i class="ti ti-device-desktop" aria-hidden="true"></i> Hands-on demo</span>
+      <span class="meta-badge"><i class="ti ti-cpu" aria-hidden="true"></i> Hardware + software</span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val">8</div><div class="stat-lbl">segments</div></div>
+    <div class="stat-card"><div class="stat-val">90</div><div class="stat-lbl">minutes</div></div>
+    <div class="stat-card"><div class="stat-val">1</div><div class="stat-lbl">live demo</div></div>
+    <div class="stat-card"><div class="stat-val">5</div><div class="stat-lbl">topic areas</div></div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+  <div class="timeline">
+    <div class="timeline-spine"></div>
+
+    <!-- Segment 1 -->
+    <div class="segment">
+      <div class="segment-time">0:00</div>
+      <div class="segment-dot"><div class="dot problem"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-problem">Problem framing</span>
+            <div class="seg-title">The world before IoT — why we needed it</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">10 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">Open with a visceral real-world problem. Make it tangible — not abstract. The goal is to make every beginner feel the pain that IoT was invented to solve.</div>
+          <ul class="bullets">
+            <li>Story: A farmer drives 3 hours to check a pump that wasn't broken — then drives home. Could've known remotely.</li>
+            <li>Story: A hospital patient's vitals crash. The nurse was occupied elsewhere, no alert reached anyone in time.</li>
+            <li>Story: An industrial machine overheats unnoticed — costly breakdown. A $2 temperature sensor could've prevented it.</li>
+            <li>Ask audience: "What's something you wished you could monitor or control from afar?"</li>
+            <li>Define IoT simply: "Giving everyday objects the ability to sense, communicate, and be controlled over a network."</li>
+            <li>Show a quick timeline: 1999 (Kevin Ashton coins "IoT") → 2013 (smart home explosion) → today (50B connected devices).</li>
+          </ul>
+          <div class="key-takeaway kt-problem">🎯 Goal: By minute 10, every person should understand WHY IoT exists — not just what it is.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Give me 3 more compelling real-world problems that IoT solved — suitable for beginner workshops')">
+            More problem examples <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 2 -->
+    <div class="segment">
+      <div class="segment-time">0:10</div>
+      <div class="segment-dot"><div class="dot concept"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-concept">Core concepts</span>
+            <div class="seg-title">How IoT actually works — the 4-layer model</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">12 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">Build the mental model before any hardware. Diagram the flow: physical world → sensor → microcontroller → network → cloud → user. Make this stick.</div>
+          <ul class="bullets">
+            <li>Layer 1 — Perception: sensors and actuators (eyes and hands of IoT). Thermometer, motion detector, motor, LED.</li>
+            <li>Layer 2 — Processing: the microcontroller/board reads sensor data and makes decisions (the brain).</li>
+            <li>Layer 3 — Connectivity: data travels over Wi-Fi, Bluetooth, MQTT, LoRa — to a server or directly to a phone.</li>
+            <li>Layer 4 — Application: dashboard, mobile app, alert, automated action. This is what the user sees.</li>
+            <li>Draw this live on a whiteboard or projector. Keep it hand-drawn — don't overwhelm with slides.</li>
+            <li>Analogy: "IoT is like having a very obedient, very patient assistant who never sleeps and reports everything."</li>
+          </ul>
+          <div class="key-takeaway kt-concept">🎯 Goal: Participants can explain what happens between a temperature spike and a phone alert — in plain language.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Draw me a visual diagram of the IoT 4-layer model — perception, processing, connectivity, application')">
+            Visualize this model <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 3 -->
+    <div class="segment">
+      <div class="segment-time">0:22</div>
+      <div class="segment-dot"><div class="dot hardware"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-hardware">Hardware</span>
+            <div class="seg-title">Boards, sensors & actuators — the physical layer</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">15 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">Pass real hardware around if possible. Beginners learn by touching. Show the boards side-by-side, explain where each shines. No deep specs — just enough to choose wisely.</div>
+          <ul class="bullets">
+            <li><strong>Arduino Uno</strong> — the learning board. Simple, no OS, C/C++, ideal for beginners. No built-in Wi-Fi, great for understanding low-level I/O.</li>
+            <li><strong>ESP8266 / ESP32</strong> — the workhorse of IoT. Built-in Wi-Fi (ESP32 has Bluetooth too), cheap (~$3), huge community, MicroPython + Arduino support.</li>
+            <li><strong>Raspberry Pi</strong> — a full Linux computer. Overkill for most sensors but great for gateways, cameras, local servers.</li>
+            <li><strong>Sensors to show:</strong> DHT11/22 (temp+humidity), HC-SR04 (ultrasonic distance), PIR (motion), LDR (light), soil moisture.</li>
+            <li><strong>Actuators to show:</strong> LEDs, servo motors, buzzers, relay modules (to control real AC devices safely).</li>
+            <li>Board comparison chart on screen: cost / Wi-Fi / power draw / beginner-friendliness.</li>
+            <li>Tip: "For your first IoT project, start with ESP32 + DHT22. Under $10, can reach the internet, massive tutorials."</li>
+          </ul>
+          <div class="key-takeaway kt-hardware">🎯 Goal: Participants can name 3 boards, say when to use each, and identify 5 sensors by sight.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Compare Arduino Uno vs ESP32 vs Raspberry Pi for IoT beginners in a simple table')">
+            Compare boards <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 4 -->
+    <div class="segment">
+      <div class="segment-time">0:37</div>
+      <div class="segment-dot"><div class="dot concept"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-concept">Protocols</span>
+            <div class="seg-title">How devices talk — MQTT, HTTP, BLE, LoRa & friends</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">12 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">Don't deep-dive into specs. Frame each protocol as a personality type. Beginners will remember characters better than acronyms.</div>
+          <ul class="bullets">
+            <li><strong>MQTT</strong> — "The postal service." Publish/subscribe. Lightweight. Runs on tiny devices. Broker in the middle (like Mosquitto or HiveMQ). The default IoT protocol.</li>
+            <li><strong>HTTP/REST</strong> — "The web request." Familiar to web devs. Heavier, but great for talking to cloud APIs (ThingSpeak, IFTTT hooks). Stateless, simple.</li>
+            <li><strong>Bluetooth / BLE</strong> — "The whisper." Short-range, low power. Great for wearables, beacons. Your phone talks to your smartwatch via BLE.</li>
+            <li><strong>Wi-Fi</strong> — "The highway." High speed, high range, high power. Fine when plugged in. Don't use it on a battery-powered field sensor.</li>
+            <li><strong>LoRa / LoRaWAN</strong> — "The long-distance runner." Kilometers of range, tiny power draw. A single base station can cover a city. Perfect for agriculture, asset tracking.</li>
+            <li><strong>Zigbee / Z-Wave</strong> — "The neighbourhood mesh." Smart home staple. Devices relay each other's signals. No central Wi-Fi dependency.</li>
+            <li>Rule of thumb: range vs power trade-off diagram. Close + plugged in = Wi-Fi. Far + battery = LoRa. Near + battery = BLE.</li>
+          </ul>
+          <div class="key-takeaway kt-concept">🎯 Goal: Given a scenario, participants can pick the right protocol and explain why in one sentence.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Show me a diagram of IoT protocols on a range vs power-consumption axis')">
+            Visualize protocols <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Break -->
+    <div class="segment">
+      <div class="segment-time">0:49</div>
+      <div class="segment-dot"><div class="dot break"></div></div>
+      <div class="segment-body break-card">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-break">Break</span>
+            <div class="seg-title">5-minute break — let them handle the hardware</div>
+          </div>
+          <span class="seg-duration">5 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 5 -->
+    <div class="segment">
+      <div class="segment-time">0:54</div>
+      <div class="segment-dot"><div class="dot software"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-software">Software & platforms</span>
+            <div class="seg-title">Programming IoT — firmware, cloud & dashboards</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">12 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">Cover the software stack end-to-end. Keep it light on syntax, heavy on concepts. The goal is orientation — they'll dig into code on their own after the workshop.</div>
+          <ul class="bullets">
+            <li><strong>Firmware languages:</strong> Arduino C/C++ (dominant for beginners), MicroPython (easier syntax, great for ESP32/Pi), CircuitPython (beginner-friendly, Adafruit's flavor).</li>
+            <li><strong>Arduino IDE</strong> — show the structure: setup() runs once, loop() runs forever. "It's the heartbeat of every Arduino/ESP device."</li>
+            <li><strong>Cloud platforms:</strong> ThingSpeak (free, quick graphs), Adafruit IO (beginner-friendly dashboards), Blynk (phone app control), AWS IoT / Azure IoT (enterprise-grade).</li>
+            <li><strong>Edge vs cloud:</strong> decision happens on-device (edge) vs sent to server for processing (cloud). Edge is faster, private; cloud is scalable, powerful.</li>
+            <li><strong>Node-RED</strong> — the visual wiring tool. Drag-and-drop logic flows. "Like Scratch, but for IoT pipelines." Great for prototyping without deep coding.</li>
+            <li><strong>Local dashboards:</strong> Grafana + InfluxDB combo for self-hosted time-series data. Popular in maker/home automation circles.</li>
+            <li>Show a real ThingSpeak or Adafruit IO dashboard screenshot with a live sensor feed.</li>
+          </ul>
+          <div class="key-takeaway kt-software">🎯 Goal: Participants can sketch the software path from sensor read → cloud publish → dashboard display.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Show me a simple Arduino sketch that reads a DHT22 sensor and publishes over MQTT')">
+            Show example code <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 6 -->
+    <div class="segment">
+      <div class="segment-time">1:06</div>
+      <div class="segment-dot"><div class="dot demo"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-demo">Live demo</span>
+            <div class="seg-title">ESP32 + DHT22 → MQTT → live dashboard — built live</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">18 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">The highlight of the session. Do this live, not pre-recorded. Show every mistake and fix it. Real bugs are more educational than a smooth rehearsal. Have a backup board ready.</div>
+          <ul class="bullets">
+            <li><strong>0–3 min:</strong> Hardware setup live. Plug DHT22 sensor into ESP32 (VCC, GND, DATA pin). Show wiring on projector. Point out pull-up resistor if needed.</li>
+            <li><strong>3–8 min:</strong> Open Arduino IDE. Walk through the sketch: include DHT.h, WiFi.h, PubSubClient.h. Fill in Wi-Fi credentials and MQTT broker address (use public HiveMQ or local Mosquitto).</li>
+            <li><strong>8–11 min:</strong> Upload the code. Show Serial Monitor — temperature readings streaming in real-time. "This is our device talking to us."</li>
+            <li><strong>11–15 min:</strong> Switch to Adafruit IO or ThingSpeak on browser. Show the topic receiving live messages. Watch the graph update. Audience reacts here — lean into it.</li>
+            <li><strong>15–18 min:</strong> Add a simple actuator: blink the onboard LED when temp exceeds threshold. Show the if-statement, re-upload, breathe on the sensor to spike the reading.</li>
+            <li>Audience challenge: "What sensor would YOU want to add? What would you do with the data?"</li>
+            <li>Backup plan: If hardware fails — have a browser-based simulator (Wokwi.com) ready as a fallback.</li>
+          </ul>
+          <div class="key-takeaway kt-demo">🎯 Goal: Everyone sees real data travel from a physical sensor to a dashboard in front of their eyes. The magic moment.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Write a complete Arduino sketch for ESP32 + DHT22 that publishes temperature and humidity over MQTT')">
+            Get the full sketch <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 7 -->
+    <div class="segment">
+      <div class="segment-time">1:24</div>
+      <div class="segment-dot"><div class="dot concept"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-concept">Security & ethics</span>
+            <div class="seg-title">The dark side — attacks, privacy & responsible IoT</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">6 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">Don't skip this. Beginners build insecure things. A quick crash course plants the seed for responsible development.</div>
+          <ul class="bullets">
+            <li>Mirai botnet 2016: 300,000 IoT devices (cameras, routers) hijacked to DDoS half the internet. Default passwords.</li>
+            <li>The 3 deadly sins: hardcoded credentials, unencrypted data transmission, no firmware update mechanism.</li>
+            <li>Quick wins: always change defaults, use TLS/HTTPS for data, don't expose devices directly to the internet — use a broker or VPN.</li>
+            <li>Privacy: "Your smart fridge knows you're out of milk — but so does the company that made it, and possibly advertisers."</li>
+            <li>Golden rule for beginners: "If you built it and it's online, assume someone will try to break in."</li>
+          </ul>
+          <div class="key-takeaway kt-concept">🎯 Goal: Participants leave with at least one security habit they'll implement from day one.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment 8 -->
+    <div class="segment">
+      <div class="segment-time">1:30</div>
+      <div class="segment-dot"><div class="dot wrapup"></div></div>
+      <div class="segment-body" onclick="toggle(this)">
+        <div class="seg-header">
+          <div class="seg-title-group">
+            <span class="seg-label lbl-wrapup">Wrap-up</span>
+            <div class="seg-title">What's next — project ideas, resources & community</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <span class="seg-duration">~ 0 min</span>
+            <span class="chevron"><i class="ti ti-chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="seg-details">
+          <div class="seg-desc">End with energy. Give them a path forward. Don't let them leave with "that was cool" and no next step — give them a project idea to start tonight.</div>
+          <ul class="bullets">
+            <li><strong>Starter projects (beginner-safe):</strong> Room temperature logger → Plant watering alert → Door open/close detector → Motion-activated light → Air quality monitor.</li>
+            <li><strong>Resources:</strong> Wokwi.com (browser simulator), RandomNerdTutorials.com (step-by-step ESP32), Arduino Project Hub, Hackster.io, r/esp32 and r/arduino communities.</li>
+            <li><strong>Shopping list:</strong> ESP32 dev board ($5), DHT22 sensor ($3), breadboard + jumper wires ($3), USB cable. Total: ~$12 to start.</li>
+            <li>Recap the 4-layer model in 60 seconds. Ask volunteers to name one thing from each layer.</li>
+            <li>Q&A — open the floor. Keep it to the time available.</li>
+            <li>Optional: share a 1-page "IoT Cheat Sheet" handout (boards, protocols, platforms).</li>
+          </ul>
+          <div class="key-takeaway kt-wrapup">🎯 Goal: Every participant walks out with ONE specific project they want to build and ONE resource to start from.</div>
+          <button class="ask-btn" onclick="event.stopPropagation(); sendPrompt('Create a 1-page IoT cheat sheet for beginners covering boards, protocols, platforms and starter projects')">
+            Generate cheat sheet <i class="ti ti-arrow-up-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-meta">
+    <span>Click any segment to expand the facilitator notes</span>
+    <span id="expand-count">0 of 7 expanded</span>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+  let expanded = 0;
+  
+  function toggle(el) {
+    if (el.classList.contains('break-card')) return;
+    
+    const details = el.querySelector('.seg-details');
+    const isOpen = details.classList.contains('open');
+    
+    details.classList.toggle('open', !isOpen);
+    el.classList.toggle('expanded', !isOpen);
+    
+    expanded += isOpen ? 1 : -1;
+    document.getElementById('expand-count').textContent = expanded + ' of 7 expanded';
+    
+    // Update progress bar
+    const pct = Math.round((expanded / 7) * 100);
+    document.getElementById('prog').style.width = pct + '%';
+  }
+
+  // Handle interaction for demo prompts gracefully in the standalone version
+  function sendPrompt(promptText) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="ti ti-sparkles" style="color:var(--accent-mid)"></i> <span>Prompt generated! (Simulated action)</span>`;
+    
+    container.appendChild(toast);
+    
+    // Cleanup toast from DOM after animation finishes
+    setTimeout(() => {
+      toast.remove();
+    }, 2800);
+    
+    console.log("Simulated Chat Prompt triggered:", promptText);
+  }
+</script>
+
+</body>
+</html>
