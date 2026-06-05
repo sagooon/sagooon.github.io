@@ -1,0 +1,2444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IoT Workshop — Complete Reference Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0D0F14; --bg2:#131720; --bg3:#1A2030; --bg4:#1F2840;
+      --surface:#222A3E; --surface2:#2A344A;
+      --border:#2E3A52; --border2:#3A4A66;
+      --text:#E8EDF8; --text2:#A8B4CC; --text3:#6A7A99;
+      --accent:#3BFFC0; --accent-dim:#1A7A5A;
+      --accent2:#FF6B35; --accent3:#A78BFA; --accent4:#38BDF8; --accent5:#FB923C;
+      --yellow:#FCD34D; --red:#F87171; --green:#4ADE80;
+      --hardware:#F59E0B; --software:#A78BFA; --protocol:#38BDF8;
+      --demo:#3BFFC0; --ethics:#F87171; --problem:#FF6B35; --concept:#FB923C;
+      --font-display:'Sora',sans-serif; --font-mono:'JetBrains Mono','Space Mono',monospace;
+      --font-body:'Sora',system-ui,sans-serif;
+      --radius:8px; --radius-lg:14px; --radius-xl:20px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    ::-webkit-scrollbar{width:6px;}
+    ::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+    .page-wrap{display:flex;min-height:100vh;}
+    /* SIDEBAR */
+    .sidebar{width:240px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;display:flex;flex-direction:column;}
+    .sidebar-brand{padding:0 20px 24px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+    .sidebar-brand .logo-text{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;}
+    .sidebar-brand .logo-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+    .nav-section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:10px 20px 6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:7px 20px;font-size:12.5px;color:var(--text2);text-decoration:none;transition:all .15s;border-left:2px solid transparent;}
+    .nav-item:hover{color:var(--text);background:var(--bg3);border-left-color:var(--border2);}
+    .nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+    /* MAIN */
+    .main{flex:1;min-width:0;}
+    /* HERO */
+    .hero{position:relative;background:var(--bg2);border-bottom:1px solid var(--border);padding:64px 64px 56px;overflow:hidden;}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(59,255,192,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,255,192,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+    .hero-glow{position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(59,255,192,.08) 0%,transparent 70%);pointer-events:none;}
+    .hero-glow2{position:absolute;bottom:-60px;left:200px;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);pointer-events:none;}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(59,255,192,.1);border:1px solid rgba(59,255,192,.2);padding:5px 12px;border-radius:99px;margin-bottom:24px;}
+    .hero h1{font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;color:var(--text);margin-bottom:16px;max-width:720px;position:relative;}
+    .hero h1 span{color:var(--accent);}
+    .hero-desc{font-size:16px;color:var(--text2);max-width:600px;line-height:1.65;position:relative;margin-bottom:32px;}
+    .hero-pills{display:flex;flex-wrap:wrap;gap:10px;position:relative;}
+    .pill{font-size:12px;font-weight:500;padding:5px 14px;border-radius:99px;border:1px solid var(--border2);color:var(--text2);background:var(--bg3);}
+    /* SECTION */
+    .section{padding:64px;border-bottom:1px solid var(--border);}
+    .section:last-child{border-bottom:none;}
+    .section-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:40px;}
+    .section-number{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--text3);padding-top:4px;flex-shrink:0;}
+    .section-title-group{flex:1;}
+    .section-tag{display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:10px;}
+    .section-title{font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.2;color:var(--text);}
+    .section-subtitle{font-size:15px;color:var(--text2);margin-top:8px;max-width:660px;line-height:1.6;}
+    /* tag colours */
+    .tag-problem{background:rgba(255,107,53,.15);color:var(--problem);}
+    .tag-concept{background:rgba(251,146,60,.15);color:var(--concept);}
+    .tag-hardware{background:rgba(245,158,11,.15);color:var(--hardware);}
+    .tag-software{background:rgba(167,139,250,.15);color:var(--software);}
+    .tag-protocol{background:rgba(56,189,248,.15);color:var(--protocol);}
+    .tag-demo{background:rgba(59,255,192,.15);color:var(--demo);}
+    .tag-ethics{background:rgba(248,113,113,.15);color:var(--ethics);}
+    .tag-wrapup{background:rgba(168,180,204,.1);color:var(--text2);}
+    /* PROSE */
+    .prose{max-width:780px;}
+    .prose p{color:var(--text2);margin-bottom:16px;line-height:1.75;}
+    .prose p:last-child{margin-bottom:0;}
+    .prose strong{color:var(--text);font-weight:600;}
+    .prose em{color:var(--accent);font-style:normal;}
+    /* CALLOUT */
+    .callout{border-radius:var(--radius-lg);padding:20px 24px;margin:24px 0;border-left:3px solid;display:flex;gap:16px;}
+    .callout-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+    .callout-body{flex:1;}
+    .callout-title{font-weight:700;font-size:14px;margin-bottom:6px;}
+    .callout-text{font-size:13.5px;color:var(--text2);line-height:1.65;}
+    .callout.info{background:rgba(56,189,248,.07);border-color:var(--accent4);}
+    .callout.info .callout-title{color:var(--accent4);}
+    .callout.warning{background:rgba(252,211,77,.07);border-color:var(--yellow);}
+    .callout.warning .callout-title{color:var(--yellow);}
+    .callout.tip{background:rgba(59,255,192,.07);border-color:var(--accent);}
+    .callout.tip .callout-title{color:var(--accent);}
+    .callout.danger{background:rgba(248,113,113,.07);border-color:var(--red);}
+    .callout.danger .callout-title{color:var(--red);}
+    .callout.story{background:rgba(167,139,250,.07);border-color:var(--accent3);}
+    .callout.story .callout-title{color:var(--accent3);}
+    /* TAKEAWAY */
+    .takeaway{margin-top:32px;border-radius:var(--radius-lg);background:linear-gradient(135deg,rgba(59,255,192,.07),rgba(56,189,248,.05));border:1px solid rgba(59,255,192,.2);padding:20px 24px;display:flex;align-items:flex-start;gap:14px;}
+    .takeaway-icon{font-size:22px;flex-shrink:0;}
+    .takeaway-text{font-size:14px;color:var(--text);line-height:1.65;font-weight:500;}
+    /* CARDS */
+    .cards{display:grid;gap:16px;}
+    .cards-2{grid-template-columns:repeat(2,1fr);}
+    .cards-3{grid-template-columns:repeat(3,1fr);}
+    .cards-4{grid-template-columns:repeat(4,1fr);}
+    .card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;transition:border-color .2s;}
+    .card:hover{border-color:var(--border2);}
+    .card-icon{font-size:28px;margin-bottom:12px;}
+    .card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;}
+    .card-text{font-size:13px;color:var(--text2);line-height:1.6;}
+    .card-tag{display:inline-block;font-family:var(--font-mono);font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-bottom:10px;}
+    /* TABLE */
+    .table-wrap{overflow-x:auto;margin:24px 0;border-radius:var(--radius-lg);border:1px solid var(--border);}
+    table{width:100%;border-collapse:collapse;font-size:13px;}
+    thead{background:var(--bg3);}
+    thead th{padding:14px 16px;text-align:left;font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);}
+    tbody tr{border-bottom:1px solid var(--border);}
+    tbody tr:last-child{border-bottom:none;}
+    tbody tr:nth-child(odd){background:rgba(255,255,255,.01);}
+    tbody td{padding:12px 16px;color:var(--text2);vertical-align:top;line-height:1.5;}
+    tbody td:first-child{color:var(--text);font-weight:600;}
+    .check{color:var(--green);}
+    .cross{color:var(--red);}
+    /* PIN DIAGRAM */
+    .pin-diagram{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;margin:24px 0;overflow-x:auto;}
+    .pin-diagram svg{display:block;max-width:100%;}
+    .board-diagram-title{font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:20px;}
+    /* EXT LINKS */
+    a.ext{color:var(--accent4);text-decoration:none;border-bottom:1px solid rgba(56,189,248,.3);font-weight:500;transition:border-color .15s,color .15s;}
+    a.ext::after{content:' ↗';font-size:.8em;vertical-align:super;font-weight:700;opacity:.75;}
+    a.ext:hover{color:#7DD3FC;border-color:#7DD3FC;}
+    /* STEPS */
+    .steps{counter-reset:step;display:flex;flex-direction:column;gap:0;}
+    .step{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);}
+    .step:last-child{border-bottom:none;}
+    .step-num{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--accent);background:rgba(59,255,192,.1);border:1px solid rgba(59,255,192,.25);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+    .step-body{flex:1;}
+    .step-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;}
+    .step-text{font-size:13.5px;color:var(--text2);line-height:1.65;}
+    /* BULLET LIST */
+    .blist{list-style:none;display:flex;flex-direction:column;gap:10px;margin:16px 0;}
+    .blist li{padding-left:24px;position:relative;font-size:13.5px;color:var(--text2);line-height:1.65;}
+    .blist li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:12px;top:2px;}
+    .blist li strong{color:var(--text);font-weight:600;}
+    /* H3 H4 */
+    h3{font-size:20px;font-weight:700;color:var(--text);margin:36px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+    h4{font-size:15px;font-weight:700;color:var(--text);margin:24px 0 10px;}
+    h3:first-child,h4:first-child{margin-top:0;}
+    /* CODE */
+    .code-wrap{background:#0A0C12;border:1px solid var(--border);border-radius:var(--radius-lg);margin:20px 0;overflow:hidden;}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);}
+    .code-lang{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);}
+    .code-filename{font-family:var(--font-mono);font-size:12px;color:var(--text2);}
+    .copy-btn{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:rgba(59,255,192,.1);border:1px solid rgba(59,255,192,.25);padding:4px 12px;border-radius:4px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+    .copy-btn:hover{background:rgba(59,255,192,.18);border-color:rgba(59,255,192,.45);}
+    .copy-btn.copied{color:var(--green);background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.25);}
+    .download-btn{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent4);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);padding:4px 12px;border-radius:4px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;text-decoration:none;}
+    .download-btn:hover{background:rgba(56,189,248,.18);}
+    .code-actions{display:flex;gap:8px;}
+    pre{padding:22px 20px;overflow-x:auto;font-family:var(--font-mono);font-size:13px;line-height:1.7;color:#CBD5E1;}
+    .kw{color:#A78BFA;} .fn{color:#38BDF8;} .str{color:#86EFAC;} .num{color:#FCD34D;} .cm{color:#475569;font-style:italic;} .pp{color:#FB923C;} .tp{color:#F0ABFC;} .op{color:#94A3B8;}
+    /* WIRING */
+    .wiring-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
+    .wiring-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;}
+    .wiring-card h5{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;font-family:var(--font-mono);}
+    .wire-row{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:11.5px;color:var(--text2);padding:4px 0;border-bottom:1px solid var(--border);}
+    .wire-row:last-child{border-bottom:none;}
+    .wire-pin{font-weight:700;}
+    .wire-vcc{color:#F87171;} .wire-gnd{color:#94A3B8;} .wire-data{color:#4ADE80;} .wire-scl{color:#FCD34D;} .wire-sda{color:#38BDF8;} .wire-trig{color:#FB923C;} .wire-echo{color:#A78BFA;}
+    /* PROTOCOL CARD */
+    .protocol-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;}
+    .protocol-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+    .protocol-badge{font-family:var(--font-mono);font-size:13px;font-weight:700;padding:6px 14px;border-radius:6px;flex-shrink:0;}
+    .protocol-name{font-size:17px;font-weight:700;color:var(--text);}
+    .protocol-nickname{font-size:13px;color:var(--text3);font-style:italic;}
+    .protocol-body{font-size:13.5px;color:var(--text2);line-height:1.65;}
+    .protocol-specs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+    .spec-pill{font-family:var(--font-mono);font-size:11px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);padding:3px 10px;border-radius:4px;}
+    /* BADGE */
+    .badge{display:inline-block;font-family:var(--font-mono);font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:4px;vertical-align:middle;}
+    .badge-green{background:rgba(74,222,128,.15);color:var(--green);}
+    .badge-yellow{background:rgba(252,211,77,.15);color:var(--yellow);}
+    .badge-red{background:rgba(248,113,113,.15);color:var(--red);}
+    .badge-blue{background:rgba(56,189,248,.15);color:var(--accent4);}
+    /* LEVEL PATH */
+    .level-path{display:flex;flex-direction:column;border-left:2px solid var(--border2);margin-left:12px;padding-left:28px;}
+    .level-item{position:relative;padding-bottom:28px;}
+    .level-item:last-child{padding-bottom:0;}
+    .level-item::before{content:'';position:absolute;left:-35px;top:5px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border2);background:var(--bg);}
+    .level-item.l1::before{background:var(--green);border-color:var(--green);box-shadow:0 0 10px rgba(74,222,128,.4);}
+    .level-item.l2::before{background:var(--accent4);border-color:var(--accent4);box-shadow:0 0 10px rgba(56,189,248,.4);}
+    .level-item.l3::before{background:var(--accent3);border-color:var(--accent3);box-shadow:0 0 10px rgba(167,139,250,.4);}
+    .level-item.l4::before{background:var(--accent5);border-color:var(--accent5);box-shadow:0 0 10px rgba(251,146,60,.4);}
+    .level-item.l5::before{background:var(--red);border-color:var(--red);box-shadow:0 0 10px rgba(248,113,113,.4);}
+    .level-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+    .level-text{font-size:13px;color:var(--text2);line-height:1.6;}
+    .level-examples{font-size:12px;color:var(--text3);font-style:italic;margin-top:4px;}
+    /* GROUP CARD */
+    .group-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;margin-bottom:20px;}
+    .group-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+    .group-num{font-family:var(--font-mono);font-size:13px;font-weight:700;width:38px;height:38px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .group-title{font-size:17px;font-weight:700;color:var(--text);}
+    .group-sub{font-size:13px;color:var(--text3);}
+    .group-task{font-size:13.5px;color:var(--text2);line-height:1.75;}
+    /* RESOURCE */
+    .resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:20px 0;}
+    .resource-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;text-decoration:none;display:block;transition:border-color .2s,background .2s;}
+    .resource-card:hover{border-color:var(--border2);background:var(--bg4);}
+    .resource-icon{font-size:24px;margin-bottom:10px;}
+    .resource-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+    .resource-desc{font-size:12px;color:var(--text2);line-height:1.5;}
+    .resource-url{font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-top:8px;}
+    /* TIMING */
+    .timing-wrap{background:#0A0C12;border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:20px 0;overflow-x:auto;}
+    /* BLOCK DIAGRAM */
+    .block-diagram-container{background:#0A0C12;border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;margin:24px 0;overflow-x:auto;}
+    /* INLINE CODE */
+    code{font-family:var(--font-mono);font-size:.875em;background:var(--bg4);border:1px solid var(--border);color:var(--accent);padding:1px 6px;border-radius:4px;}
+    .cite{font-size:12px;color:var(--text3);font-style:italic;margin-top:8px;}
+    /* COMMUNITY */
+    .community-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0;}
+    .community-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;}
+    .community-platform{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+    .community-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;}
+    .community-desc{font-size:13px;color:var(--text2);line-height:1.6;}
+    .community-meta{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
+    .community-stat{font-family:var(--font-mono);font-size:11px;color:var(--text3);}
+    /* SHOPPING LIST */
+    .shop-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13.5px;}
+    .shop-item:last-child{border-bottom:none;}
+    .shop-name{color:var(--text);font-weight:500;}
+    .shop-price{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-weight:700;}
+    .shop-note{font-size:11px;color:var(--text3);}
+    /* PROGRESS DOTS */
+    .progress-dots{display:flex;gap:6px;padding:16px 64px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+    .progress-dot{width:8px;height:8px;border-radius:50%;opacity:.4;}
+    .progress-dot.active{opacity:1;}
+    /* RESPONSIVE */
+    @media(max-width:900px){.sidebar{display:none;}.section{padding:40px 20px;}.hero{padding:40px 20px;}.cards-2,.cards-3,.cards-4{grid-template-columns:1fr;}.progress-dots{padding:16px 20px;}}
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo-text">IoT Workshop</div>
+    <div class="logo-sub">Attendee Reference Notes</div>
+  </div>
+  <div class="nav-section-label">Sections</div>
+  <a href="#problem"   class="nav-item"><span class="nav-dot" style="background:var(--problem)"></span>Problem Framing</a>
+  <a href="#concepts"  class="nav-item"><span class="nav-dot" style="background:var(--concept)"></span>Core Concepts</a>
+  <a href="#hardware"  class="nav-item"><span class="nav-dot" style="background:var(--hardware)"></span>Hardware</a>
+  <a href="#software"  class="nav-item"><span class="nav-dot" style="background:var(--software)"></span>Software &amp; Platforms</a>
+  <a href="#protocols" class="nav-item"><span class="nav-dot" style="background:var(--protocol)"></span>Protocols</a>
+  <a href="#demo"      class="nav-item"><span class="nav-dot" style="background:var(--demo)"></span>Live Demo &amp; Code</a>
+  <a href="#ethics"    class="nav-item"><span class="nav-dot" style="background:var(--ethics)"></span>Security &amp; Ethics</a>
+  <a href="#wrapup"    class="nav-item"><span class="nav-dot" style="background:var(--text3)"></span>Projects &amp; Community</a>
+  <div style="margin-top:auto;padding:20px;border-top:1px solid var(--border);margin-top:24px;">
+    <div style="font-size:11px;color:var(--text3);line-height:1.6;">All external links open in new tab.<br>Code blocks are one-click copyable. Prepared by Saisagun Thapa</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-tag">🛠 IoT Beginner Workshop · Attendee Reference Notes</div>
+  <h1>The Internet of <span>Things</span>:<br>Everything You Need to Know</h1>
+  <p class="hero-desc">Your comprehensive companion to this workshop. From physical hardware to cloud dashboards, this document covers every concept discussed today — with code you can copy in one click, diagrams, external resources, and hands-on project guides.</p>
+  <div class="hero-pills">
+    <span class="pill">🔌 Arduino · ESP32 · STM32 · Raspberry Pi</span>
+    <span class="pill">📡 SPI · UART · I²C · BLE · LoRa · Wi-Fi</span>
+    <span class="pill">💻 C/C++ · MicroPython · Arduino IDE</span>
+    <span class="pill">☁️ Cloud Platforms · MQTT · Node-RED</span>
+    <span class="pill">🔒 Security · Ethics · Privacy</span>
+  </div>
+</div>
+
+<div class="progress-dots" aria-hidden="true">
+  <div class="progress-dot active" style="background:var(--problem)"></div>
+  <div class="progress-dot" style="background:var(--concept)"></div>
+  <div class="progress-dot" style="background:var(--hardware)"></div>
+  <div class="progress-dot" style="background:var(--software)"></div>
+  <div class="progress-dot" style="background:var(--protocol)"></div>
+  <div class="progress-dot" style="background:var(--demo)"></div>
+  <div class="progress-dot" style="background:var(--ethics)"></div>
+  <div class="progress-dot" style="background:var(--text3)"></div>
+</div>
+
+<!-- ═══ §1 PROBLEM FRAMING ═══ -->
+<section class="section" id="problem">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-problem">Problem Framing</span>
+      <h2 class="section-title">Why Does IoT Exist?<br>The World Before the Network.</h2>
+      <p class="section-subtitle">Before chips and protocols, look at the problem. Every great technology is born from a painful gap between what humans can observe and what they need to know — right now, from anywhere.</p>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Imagine a world where every piece of information about the physical environment — the temperature of a warehouse, the pressure in a pipe, the heartbeat of a patient, the moisture level of a field — exists <strong>only locally, at the source</strong>, invisible to everyone not standing next to it. That was the world before IoT. And in many critical situations, information that arrives late is information that arrives too late.</p>
+  </div>
+
+  <div class="callout story">
+    <div class="callout-icon">🌾</div>
+    <div class="callout-body">
+      <div class="callout-title">Story 1 — The Farmer's Wasted Day</div>
+      <div class="callout-text">A farmer drives three hours to check an irrigation pump. The pump is fine. He drives three hours back. The following week, the same pump fails silently overnight and floods a field before dawn. Total loss: one season's crop. A $4 soil moisture sensor and a cellular module could have sent an SMS alert at the exact moment the anomaly began. The information existed — inside the machine. No one could hear it.</div>
+    </div>
+  </div>
+
+  <div class="callout story">
+    <div class="callout-icon">🏥</div>
+    <div class="callout-body">
+      <div class="callout-title">Story 2 — The Silent Ward</div>
+      <div class="callout-text">A hospital manages 40 patients per nurse at night. A post-operative patient's oxygen saturation drops below safe levels at 3 AM. The bedside monitor alarms locally — but the nurse is occupied two rooms away with another emergency. Six minutes pass before anyone reaches the bed. Continuous IoT monitoring with real-time push alerts changes the response window from minutes to seconds. That gap is the difference between recovery and permanent damage.</div>
+    </div>
+  </div>
+
+  <div class="callout story">
+    <div class="callout-icon">🏭</div>
+    <div class="callout-body">
+      <div class="callout-title">Story 3 — The Machine That Nobody Listened To</div>
+      <div class="callout-text">A manufacturing plant runs high-speed compressors 24/7. Vibration patterns shift subtly over 72 hours — a classic signature of bearing failure. Nobody notices. On a Thursday afternoon the machine seizes, halting an entire production line. Downtime cost: $40,000. A vibration sensor deployed on an edge device would have flagged the drift 48 hours earlier with 94% accuracy. The machine was trying to tell someone. No one was listening.</div>
+    </div>
+  </div>
+
+  <h3>What Exactly Is IoT?</h3>
+  <div class="prose">
+    <p>The term <strong>Internet of Things</strong> was coined in 1999 by Kevin Ashton while working at Procter &amp; Gamble, in the context of RFID supply chain tracking. His insight: computers depended entirely on humans to enter information. IoT flips this — the devices themselves observe the world and generate data autonomously.</p>
+    <p>A clean one-line definition: <em>"Giving everyday objects the ability to sense, communicate, and be controlled over a network."</em></p>
+    <p>Today, over <strong>18 billion IoT devices</strong> are connected globally (<a href="https://iot-analytics.com/number-connected-iot-devices/" target="_blank" class="ext">IoT Analytics, 2024</a>). By 2030, projections exceed 40 billion — more than four connected devices for every person on Earth. The IoT market is not a future trend. It is present infrastructure.</p>
+  </div>
+
+  <h3>The Opportunity Space</h3>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-icon">🌿</div><div class="card-title">Smart Agriculture</div><div class="card-text">Soil sensors, automated irrigation, drone imagery, livestock health. IoT-driven precision farming can cut water usage by 30% and increase yield by 20%.</div></div>
+    <div class="card"><div class="card-icon">🏙️</div><div class="card-title">Smart Cities</div><div class="card-text">Adaptive traffic signals, air quality monitoring, smart waste collection, connected streetlights that dim when roads are empty.</div></div>
+    <div class="card"><div class="card-icon">🏠</div><div class="card-title">Smart Homes</div><div class="card-text">Thermostats, locks, cameras, appliances that respond to presence and schedule. The most visible consumer face of IoT.</div></div>
+    <div class="card"><div class="card-icon">🏥</div><div class="card-title">Connected Healthcare</div><div class="card-text">Wearable ECG monitors, continuous glucose sensors, remote patient monitoring. IoT that literally saves lives — measurably, verifiably.</div></div>
+    <div class="card"><div class="card-icon">⚡</div><div class="card-title">Industrial IoT (IIoT)</div><div class="card-text">Predictive maintenance, asset tracking, energy monitoring, digital twins of factories. The largest IoT market segment by revenue.</div></div>
+    <div class="card"><div class="card-icon">🌊</div><div class="card-title">Environment & Safety</div><div class="card-text">Flood and landslide early warning, river water quality, forest fire detection. IoT as a planetary nervous system — especially critical in Nepal's geography.</div></div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">The core problem IoT solves: <strong>the gap between physical reality and human awareness.</strong> Every IoT system answers one question: "What would we do differently if we knew this information in real time?" Start with that question — not with a chip choice.</div>
+  </div>
+</section>
+
+
+<!-- ═══ §2 CORE CONCEPTS ═══ -->
+<section class="section" id="concepts">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-concept">Core Concepts</span>
+      <h2 class="section-title">How IoT Actually Works:<br>The 4-Layer Architecture</h2>
+      <p class="section-subtitle">Every IoT system — from a $3 soil sensor to a million-dollar industrial controller — follows the same fundamental architecture. Build this mental model first. Everything else is detail.</p>
+    </div>
+  </div>
+
+  <div class="block-diagram-container">
+    <svg viewBox="0 0 780 160" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace">
+      <rect x="10" y="30" width="160" height="100" rx="10" fill="#1A2030" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="90" y="22" fill="#F59E0B" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1">LAYER 1</text>
+      <text x="90" y="68" fill="#E8EDF8" font-size="13" font-weight="700" text-anchor="middle">Perception</text>
+      <text x="90" y="88" fill="#A8B4CC" font-size="10" text-anchor="middle">Sensors &amp; Actuators</text>
+      <text x="90" y="108" fill="#6A7A99" font-size="9" text-anchor="middle">Eyes &amp; Hands of IoT</text>
+      <path d="M170 80 L198 80" stroke="#3BFFC0" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+      <rect x="200" y="30" width="160" height="100" rx="10" fill="#1A2030" stroke="#FB923C" stroke-width="1.5"/>
+      <text x="280" y="22" fill="#FB923C" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1">LAYER 2</text>
+      <text x="280" y="68" fill="#E8EDF8" font-size="13" font-weight="700" text-anchor="middle">Processing</text>
+      <text x="280" y="88" fill="#A8B4CC" font-size="10" text-anchor="middle">Microcontroller / MCU</text>
+      <text x="280" y="108" fill="#6A7A99" font-size="9" text-anchor="middle">The Brain</text>
+      <path d="M360 80 L388 80" stroke="#3BFFC0" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+      <rect x="390" y="30" width="160" height="100" rx="10" fill="#1A2030" stroke="#38BDF8" stroke-width="1.5"/>
+      <text x="470" y="22" fill="#38BDF8" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1">LAYER 3</text>
+      <text x="470" y="68" fill="#E8EDF8" font-size="13" font-weight="700" text-anchor="middle">Connectivity</text>
+      <text x="470" y="88" fill="#A8B4CC" font-size="10" text-anchor="middle">Wi-Fi · MQTT · LoRa</text>
+      <text x="470" y="108" fill="#6A7A99" font-size="9" text-anchor="middle">The Nervous System</text>
+      <path d="M550 80 L578 80" stroke="#3BFFC0" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+      <rect x="580" y="30" width="190" height="100" rx="10" fill="#1A2030" stroke="#3BFFC0" stroke-width="1.5"/>
+      <text x="675" y="22" fill="#3BFFC0" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1">LAYER 4</text>
+      <text x="675" y="68" fill="#E8EDF8" font-size="13" font-weight="700" text-anchor="middle">Application</text>
+      <text x="675" y="88" fill="#A8B4CC" font-size="10" text-anchor="middle">Dashboard · Alert · Action</text>
+      <text x="675" y="108" fill="#6A7A99" font-size="9" text-anchor="middle">What Users See</text>
+      <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3BFFC0"/></marker></defs>
+    </svg>
+  </div>
+
+  <h3>Layer 1 — Perception (Sensors &amp; Actuators)</h3>
+  <div class="prose">
+    <p><strong>Sensors</strong> translate physical phenomena into electrical signals. <strong>Actuators</strong> do the reverse — they turn signals into physical action. This layer is the IoT system's contact with the physical world.</p>
+  </div>
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-title">🔍 Common Sensors</div>
+      <ul class="blist" style="margin-top:10px">
+        <li><strong>DHT11/DHT22</strong> — Temperature &amp; humidity (digital, 1-wire-like protocol)</li>
+        <li><strong>HC-SR04</strong> — Ultrasonic distance (TRIG pulse → ECHO duration, up to 4m)</li>
+        <li><strong>MPU6050</strong> — 3-axis accelerometer + 3-axis gyroscope (I²C, 0x68)</li>
+        <li><strong>BMP180/BMP280</strong> — Barometric pressure + temperature (I²C)</li>
+        <li><strong>Soil Moisture</strong> — Resistive or capacitive; analog voltage output</li>
+        <li><strong>PIR HC-SR501</strong> — Passive infrared motion detector (digital output)</li>
+        <li><strong>LDR</strong> — Light Dependent Resistor; read via voltage divider + ADC</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Common Actuators</div>
+      <ul class="blist" style="margin-top:10px">
+        <li><strong>LED</strong> — Status indicator, PWM dimming, RGB color control</li>
+        <li><strong>Servo Motor SG90</strong> — Positional control 0°–180° via PWM pulse width</li>
+        <li><strong>DC Motor + L298N</strong> — Variable speed and direction via H-bridge driver</li>
+        <li><strong>Relay Module</strong> — Switch real-world AC loads safely from 3.3V logic</li>
+        <li><strong>Buzzer</strong> — Audio alerts, tone generation via digital/PWM pin</li>
+        <li><strong>OLED SSD1306</strong> — 128×64px display over I²C; great for local data readout</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Layer 2 — Processing (The Microcontroller)</h3>
+  <div class="prose">
+    <p>The <strong>microcontroller (MCU)</strong> is the brain of every IoT node. It reads electrical signals from sensors, executes your firmware to make decisions, drives actuators, and manages communication. Unlike a general-purpose computer, an MCU runs a <em>single program continuously</em> — the firmware loop never stops as long as power is applied. This is intentional: reliability and determinism matter more than flexibility in embedded systems.</p>
+    <p>The MCU bridges the physical and digital worlds. On one side, raw voltages from sensors. On the other, structured data packets destined for a network. Everything in between — filtering noise, converting units, checking thresholds, triggering alerts — is the MCU's job.</p>
+    <p>Key MCU subsystems you will interact with as an IoT developer:</p>
+  </div>
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-title">🧠 CPU Core</div>
+      <div class="card-text">Executes your code instruction by instruction. On Arduino Uno: 8-bit AVR at 16 MHz (~16 million instructions/second). On ESP32: dual 32-bit Xtensa cores at 240 MHz. Clock speed determines how fast decisions are made — but most IoT tasks are I/O-bound, not CPU-bound.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">💾 Memory Types</div>
+      <div class="card-text"><strong>Flash</strong> — stores your program permanently (32 KB on Uno, 4 MB on ESP32). <strong>SRAM</strong> — working memory for variables at runtime (2 KB on Uno, 520 KB on ESP32). <strong>EEPROM</strong> — small non-volatile storage for settings that survive power cuts (1 KB on Uno).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">⏱ Timers &amp; Watchdog</div>
+      <div class="card-text">Hardware timers generate precise time intervals independently of the CPU — used for PWM generation, baud rate clocking, and scheduling. The <strong>watchdog timer</strong> automatically resets the MCU if the firmware hangs — critical for unattended field deployments.</div>
+    </div>
+  </div>
+
+  <div class="block-diagram-container" style="margin-top:24px">
+    <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace" font-size="9">
+      <text x="360" y="16" fill="#FB923C" font-size="11" font-weight="700" text-anchor="middle">MICROCONTROLLER INTERNAL BLOCK DIAGRAM</text>
+      <!-- CPU -->
+      <rect x="280" y="30" width="160" height="50" rx="8" fill="#1A1A3A" stroke="#A78BFA" stroke-width="1.5"/>
+      <text x="360" y="52" fill="#A78BFA" font-size="10" font-weight="700" text-anchor="middle">CPU Core</text>
+      <text x="360" y="68" fill="#6A7A99" font-size="8.5" text-anchor="middle">Fetch · Decode · Execute</text>
+      <!-- Internal Bus -->
+      <line x1="100" y1="130" x2="620" y2="130" stroke="#2E3A52" stroke-width="8" stroke-linecap="round"/>
+      <text x="360" y="134" fill="#3BFFC0" font-size="8" font-weight="700" text-anchor="middle">INTERNAL BUS</text>
+      <!-- CPU to bus -->
+      <line x1="360" y1="80" x2="360" y2="126" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <!-- Peripherals on bus -->
+      <rect x="20"  y="150" width="90"  height="40" rx="6" fill="#1A2030" stroke="#38BDF8" stroke-width="1"/>
+      <text x="65"  y="168" fill="#38BDF8" font-size="8.5" font-weight="700" text-anchor="middle">GPIO</text>
+      <text x="65"  y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Digital I/O</text>
+      <line x1="65" y1="150" x2="65" y2="130" stroke="#38BDF8" stroke-width="1"/>
+
+      <rect x="120" y="150" width="90" height="40" rx="6" fill="#1A2030" stroke="#FB923C" stroke-width="1"/>
+      <text x="165" y="168" fill="#FB923C" font-size="8.5" font-weight="700" text-anchor="middle">ADC</text>
+      <text x="165" y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Analog → Digital</text>
+      <line x1="165" y1="150" x2="165" y2="130" stroke="#FB923C" stroke-width="1"/>
+
+      <rect x="220" y="150" width="90" height="40" rx="6" fill="#1A2030" stroke="#3BFFC0" stroke-width="1"/>
+      <text x="265" y="168" fill="#3BFFC0" font-size="8.5" font-weight="700" text-anchor="middle">PWM / Timer</text>
+      <text x="265" y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Pulse generation</text>
+      <line x1="265" y1="150" x2="265" y2="130" stroke="#3BFFC0" stroke-width="1"/>
+
+      <rect x="320" y="150" width="80" height="40" rx="6" fill="#1A2030" stroke="#4ADE80" stroke-width="1"/>
+      <text x="360" y="168" fill="#4ADE80" font-size="8.5" font-weight="700" text-anchor="middle">UART</text>
+      <text x="360" y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Serial comms</text>
+      <line x1="360" y1="150" x2="360" y2="130" stroke="#4ADE80" stroke-width="1"/>
+
+      <rect x="410" y="150" width="80" height="40" rx="6" fill="#1A2030" stroke="#FCD34D" stroke-width="1"/>
+      <text x="450" y="168" fill="#FCD34D" font-size="8.5" font-weight="700" text-anchor="middle">SPI / I²C</text>
+      <text x="450" y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Bus protocols</text>
+      <line x1="450" y1="150" x2="450" y2="130" stroke="#FCD34D" stroke-width="1"/>
+
+      <rect x="500" y="150" width="80" height="40" rx="6" fill="#1A2030" stroke="#F87171" stroke-width="1"/>
+      <text x="540" y="168" fill="#F87171" font-size="8.5" font-weight="700" text-anchor="middle">Flash / SRAM</text>
+      <text x="540" y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Program + data</text>
+      <line x1="540" y1="150" x2="540" y2="130" stroke="#F87171" stroke-width="1"/>
+
+      <rect x="590" y="150" width="110" height="40" rx="6" fill="#1A2030" stroke="#A78BFA" stroke-width="1"/>
+      <text x="645" y="168" fill="#A78BFA" font-size="8.5" font-weight="700" text-anchor="middle">Wi-Fi / BT (ESP32)</text>
+      <text x="645" y="182" fill="#6A7A99" font-size="7.5" text-anchor="middle">Radio subsystem</text>
+      <line x1="645" y1="150" x2="645" y2="130" stroke="#A78BFA" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">Why do MCUs have so little RAM?</div>
+      <div class="callout-text">The Arduino Uno has 2 KB of SRAM. That sounds absurdly small — your browser tab uses thousands of times more. But an MCU reading a temperature sensor and sending MQTT packets needs to hold perhaps 50 bytes of variables at any time. The constraint forces lean, efficient code and dramatically reduces power consumption and cost. Constrained resources are a feature of embedded design, not a bug.</div>
+    </div>
+  </div>
+
+  <h3>Layer 3 — Connectivity (The Network)</h3>
+  <div class="prose">
+    <p>Layer 3 is where your device stops being isolated and becomes part of a system. Data leaves the MCU and travels — across a room over BLE, across a city over LoRa, or across the planet over the internet via Wi-Fi and MQTT. The choice of connectivity protocol here is the single most consequential design decision in most IoT projects, because it determines <strong>range, power budget, data rate, and infrastructure cost</strong> simultaneously.</p>
+    <p>These constraints form an inescapable triangle: you can optimize for long range, low power, or high data rate — but not all three at once. Every protocol is an engineered trade-off within this triangle.</p>
+  </div>
+
+  <div class="block-diagram-container">
+    <svg viewBox="0 0 720 185" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace" font-size="9">
+      <text x="360" y="16" fill="#38BDF8" font-size="11" font-weight="700" text-anchor="middle">CONNECTIVITY PROTOCOL TRADE-OFF TRIANGLE</text>
+      <!-- Triangle -->
+      <polygon points="360,38 120,160 600,160" fill="none" stroke="#2E3A52" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <!-- Corner labels -->
+      <text x="360" y="34" fill="#F87171" font-size="10" font-weight="700" text-anchor="middle">HIGH DATA RATE</text>
+      <text x="360" y="46" fill="#6A7A99" font-size="8" text-anchor="middle">Wi-Fi (150 Mbps)</text>
+      <text x="40"  y="172" fill="#4ADE80" font-size="10" font-weight="700" text-anchor="middle">LOW POWER</text>
+      <text x="40"  y="183" fill="#6A7A99" font-size="8" text-anchor="middle">LoRa, Zigbee</text>
+      <text x="680" y="172" fill="#FCD34D" font-size="10" font-weight="700" text-anchor="middle">LONG RANGE</text>
+      <text x="680" y="183" fill="#6A7A99" font-size="8" text-anchor="middle">LoRa (15 km)</text>
+      <!-- Protocol bubbles -->
+      <circle cx="360" cy="80" r="20" fill="rgba(56,189,248,.15)" stroke="#38BDF8" stroke-width="1.5"/>
+      <text x="360" y="78" fill="#38BDF8" font-size="8" font-weight="700" text-anchor="middle">Wi-Fi</text>
+      <text x="360" y="90" fill="#6A7A99" font-size="7" text-anchor="middle">fast, power-hungry</text>
+
+      <circle cx="210" cy="138" r="18" fill="rgba(167,139,250,.15)" stroke="#A78BFA" stroke-width="1.5"/>
+      <text x="210" y="136" fill="#A78BFA" font-size="8" font-weight="700" text-anchor="middle">BLE</text>
+      <text x="210" y="148" fill="#6A7A99" font-size="7" text-anchor="middle">low power, short</text>
+
+      <circle cx="490" cy="138" r="18" fill="rgba(252,211,77,.15)" stroke="#FCD34D" stroke-width="1.5"/>
+      <text x="490" y="136" fill="#FCD34D" font-size="8" font-weight="700" text-anchor="middle">LoRa</text>
+      <text x="490" y="148" fill="#6A7A99" font-size="7" text-anchor="middle">far, slow, efficient</text>
+
+      <circle cx="360" cy="138" r="16" fill="rgba(74,222,128,.15)" stroke="#4ADE80" stroke-width="1"/>
+      <text x="360" y="136" fill="#4ADE80" font-size="8" font-weight="700" text-anchor="middle">Zigbee</text>
+      <text x="360" y="148" fill="#6A7A99" font-size="7" text-anchor="middle">mesh, balanced</text>
+
+      <text x="360" y="168" fill="#3BFFC0" font-size="8" text-anchor="middle">⚠ No single protocol wins on all three axes. Pick the trade-off that matches your constraints.</text>
+    </svg>
+  </div>
+
+  <div class="prose" style="margin-top:16px">
+    <p>Beyond choosing a radio protocol, Layer 3 also involves the <strong>application-layer messaging protocol</strong> that rides on top of the network. For IoT, this is almost always <strong>MQTT</strong> (for constrained devices over TCP) or <strong>HTTP/REST</strong> (for cloud integrations). We cover both in detail in the <a href="#protocols" class="ext">Protocols section</a>.</p>
+    <p>A key concept at this layer is the difference between <strong>always-on</strong> and <strong>duty-cycled</strong> connectivity. A mains-powered device can hold a Wi-Fi connection permanently. A battery-powered field sensor must wake up, transmit in milliseconds, and return to deep sleep — otherwise battery life collapses from years to days.</p>
+  </div>
+
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-title">📶 Always-On Connection</div>
+      <div class="card-text">Device maintains a persistent network connection. Receives commands instantly. Can stream continuous data. Requires stable power supply. Best for: mains-powered devices, gateways, indoor monitors, devices that need to respond to remote commands in real time.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">💤 Duty-Cycled / Deep Sleep</div>
+      <div class="card-text">Device wakes every N minutes, transmits a sensor reading in &lt;1 second, goes back to sleep. ESP32 deep sleep current: ~10 µA. A 3000 mAh battery can last 2–5 years this way. Best for: remote sensors, weather stations, agricultural monitors, anything battery-powered.</div>
+    </div>
+  </div>
+
+  <h3>Layer 4 — Application (What Users See)</h3>
+  <div class="prose">
+    <p>Layer 4 is where raw data becomes <strong>value</strong>. A temperature reading of 27.3 is just a number. A dashboard showing a 72-hour trend, firing a push notification when the reading exceeds 35°C, and letting a facilities manager remotely activate a cooling unit — that is value. Layer 4 is the reason any of the other three layers exist.</p>
+    <p>The application layer encompasses everything the end user interacts with: dashboards, mobile apps, email and SMS alert systems, automation rules (if soil moisture &lt; 30% → trigger pump), and increasingly, <strong>AI/ML inference</strong> — running machine learning models on cloud or edge to extract patterns from sensor data that humans cannot see in raw numbers.</p>
+  </div>
+
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Dashboards &amp; Visualization</div>
+      <div class="card-text">Tools like <strong>Grafana</strong>, <strong>ThingSpeak</strong>, <strong>Node-RED Dashboard</strong>, and <strong>Blynk</strong> turn time-series sensor data into charts, gauges, and maps. A well-designed dashboard answers the user's question before they know to ask it.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔔</div>
+      <div class="card-title">Alerts &amp; Automation</div>
+      <div class="card-text">Rules that fire when thresholds are crossed: <strong>IFTTT</strong>, <strong>Node-RED flows</strong>, <strong>Home Assistant automations</strong>, <strong>AWS Lambda triggers</strong>. The system acts without a human watching — this is the point of IoT.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">AI / ML at the Edge</div>
+      <div class="card-text"><strong>TensorFlow Lite</strong> and <strong>Edge Impulse</strong> let you deploy trained models directly on MCUs and Raspberry Pi — detecting anomalies, classifying sounds, recognising gestures, or predicting failures from vibration signatures without sending data to the cloud.</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📚</div>
+    <div class="callout-body">
+      <div class="callout-title">Deep Dive: Microsoft IoT for Beginners</div>
+      <div class="callout-text">Microsoft's free <a href="https://microsoft.github.io/IoT-For-Beginners" target="_blank" class="ext">IoT for Beginners curriculum</a> on GitHub — 24 lessons covering all four layers with full projects in C++ and MicroPython. Highly structured, well-maintained. Use this as your post-workshop self-study roadmap.</div>
+    </div>
+  </div>
+
+  <h3>Key Vocabulary — Essential Terms</h3>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-title">GPIO</div><div class="card-text">General Purpose Input/Output. The physical pins you control via code. Each pin can be: digital input, digital output, analog input (via ADC), PWM output, or a special function (UART/SPI/I²C). Most confusion in beginner projects comes from wrong GPIO configuration.</div></div>
+    <div class="card"><div class="card-title">PWM</div><div class="card-text">Pulse-Width Modulation. Simulates analog output on digital pins by switching rapidly between ON and OFF. The ratio of ON time to total period is the <em>duty cycle</em> (0–100%). Used for LED dimming, motor speed, servo position.</div></div>
+    <div class="card"><div class="card-title">ADC / DAC</div><div class="card-text"><strong>ADC</strong> reads analog voltage and converts to a digital number (0–1023 on 10-bit Uno; 0–4095 on 12-bit ESP32). <strong>DAC</strong> outputs a precise analog voltage from a digital value. ESP32 has 2 DAC channels; Arduino Uno has none.</div></div>
+    <div class="card"><div class="card-title">Firmware</div><div class="card-text">Software permanently written to a device's flash memory. Runs directly on hardware with no OS in between (for MCUs). The firmware loop runs continuously — every millisecond, every hour, until power is removed.</div></div>
+    <div class="card"><div class="card-title">Edge vs Cloud</div><div class="card-text"><strong>Edge:</strong> Decision on or near the device. Fast, private, works offline. <strong>Cloud:</strong> Data sent to remote server. Scalable, powerful, requires connectivity. Real systems use both — edge for real-time response, cloud for historical analysis.</div></div>
+    <div class="card"><div class="card-title">Interrupt</div><div class="card-text">A hardware signal that pauses normal execution to handle an urgent event. Example: a button press triggers an interrupt immediately — no polling needed. Without interrupts, fast events would be missed while <code>loop()</code> is doing something else.</div></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📚</div>
+    <div class="callout-body">
+      <div class="callout-title">Deep Dive: Microsoft IoT for Beginners</div>
+      <div class="callout-text">Microsoft's free <a href="https://microsoft.github.io/IoT-For-Beginners" target="_blank" class="ext">IoT for Beginners curriculum</a> on GitHub — 24 lessons covering all four layers with full projects in C++ and MicroPython. Highly structured, well-maintained. Use this as your post-workshop self-study roadmap.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">The fundamental IoT chain is always: <strong>Sense → Process → Transmit → Act.</strong> Master this pattern and you can design any IoT solution before touching a single piece of hardware. Technology choices fill in around this structure — not the other way around.</div>
+  </div>
+</section>
+
+<!-- ═══ §3 HARDWARE ═══ -->
+<section class="section" id="hardware">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-hardware">Hardware</span>
+      <h2 class="section-title">Boards, Pins &amp; Silicon:<br>The Physical Layer</h2>
+      <p class="section-subtitle">Four boards dominate the beginner-to-intermediate IoT space. Each has a distinct personality. Knowing when to use which one is a fundamental IoT skill.</p>
+    </div>
+  </div>
+
+  <!-- ARDUINO UNO -->
+  <h3>Arduino Uno R3 — The Learning Board</h3>
+  <div class="prose">
+    <p>The Arduino Uno is the universal entry point to microcontroller programming. Based on the <strong>ATmega328P</strong> — an 8-bit AVR MCU at 16 MHz — it has no OS, no Wi-Fi, no Bluetooth. What it has is radical simplicity: write code, upload it, it runs. Forever. That's why it's taught first.</p>
+    <p>The Uno is the best board for learning fundamental embedded concepts precisely because it strips away abstraction. Every pin, every byte of memory, every cycle matters. <a href="https://docs.arduino.cc/hardware/uno-rev3/" target="_blank" class="ext">Official Arduino Uno R3 Documentation</a></p>
+  </div>
+
+  <div class="pin-diagram">
+    <div class="board-diagram-title">Arduino Uno R3 — Pinout Overview</div>
+    <svg viewBox="0 0 740 310" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace" font-size="9.5">
+      <!-- Board body -->
+      <rect x="120" y="20" width="490" height="270" rx="14" fill="#1A3A2A" stroke="#2E5A42" stroke-width="2"/>
+      <!-- USB connector -->
+      <rect x="70" y="185" width="52" height="30" rx="4" fill="#2A3A4A" stroke="#4A6A8A" stroke-width="1.5"/>
+      <text x="96" y="204" fill="#6A7A99" font-size="8" text-anchor="middle">USB-B</text>
+      <!-- Power jack -->
+      <rect x="70" y="240" width="52" height="24" rx="4" fill="#2A2A3A" stroke="#4A4A6A" stroke-width="1.5"/>
+      <text x="96" y="256" fill="#6A7A99" font-size="8" text-anchor="middle">DC PWR</text>
+      <!-- ATmega chip -->
+      <rect x="270" y="115" width="110" height="64" rx="6" fill="#111" stroke="#333" stroke-width="1.5"/>
+      <text x="325" y="142" fill="#4ADE80" font-size="10" font-weight="700" text-anchor="middle">ATmega328P</text>
+      <text x="325" y="158" fill="#6A7A99" font-size="8.5" text-anchor="middle">8-bit AVR · 16MHz</text>
+      <text x="325" y="172" fill="#6A7A99" font-size="8" text-anchor="middle">32KB Flash · 2KB SRAM</text>
+      <!-- DIGITAL PINS TOP -->
+      <text x="380" y="13" fill="#38BDF8" font-size="9.5" font-weight="700" text-anchor="middle">── DIGITAL PINS (D0–D13) · PWM marked with ~ ──</text>
+      <!-- pin connector lines top -->
+      <g stroke-dasharray="3,2" stroke-width="1.2">
+        <line x1="143" y1="22" x2="143" y2="36" stroke="#38BDF8"/>
+        <line x1="173" y1="22" x2="173" y2="36" stroke="#38BDF8"/>
+        <line x1="203" y1="22" x2="203" y2="36" stroke="#38BDF8"/>
+        <line x1="233" y1="22" x2="233" y2="36" stroke="#3BFFC0"/>
+        <line x1="263" y1="22" x2="263" y2="36" stroke="#38BDF8"/>
+        <line x1="293" y1="22" x2="293" y2="36" stroke="#3BFFC0"/>
+        <line x1="323" y1="22" x2="323" y2="36" stroke="#3BFFC0"/>
+        <line x1="353" y1="22" x2="353" y2="36" stroke="#38BDF8"/>
+        <line x1="383" y1="22" x2="383" y2="36" stroke="#38BDF8"/>
+        <line x1="413" y1="22" x2="413" y2="36" stroke="#3BFFC0"/>
+        <line x1="443" y1="22" x2="443" y2="36" stroke="#3BFFC0"/>
+        <line x1="473" y1="22" x2="473" y2="36" stroke="#3BFFC0"/>
+        <line x1="503" y1="22" x2="503" y2="36" stroke="#38BDF8"/>
+        <line x1="533" y1="22" x2="533" y2="36" stroke="#38BDF8"/>
+        <line x1="563" y1="22" x2="563" y2="36" stroke="#94A3B8"/>
+        <line x1="593" y1="22" x2="593" y2="36" stroke="#FCD34D"/>
+      </g>
+      <g fill="#A8B4CC" font-size="8.5" text-anchor="middle">
+        <text x="143" y="47">D0/RX</text><text x="173" y="47">D1/TX</text><text x="203" y="47">D2</text>
+        <text x="233" y="47" fill="#3BFFC0">D3~</text><text x="263" y="47">D4</text>
+        <text x="293" y="47" fill="#3BFFC0">D5~</text><text x="323" y="47" fill="#3BFFC0">D6~</text>
+        <text x="353" y="47">D7</text><text x="383" y="47">D8</text>
+        <text x="413" y="47" fill="#3BFFC0">D9~</text><text x="443" y="47" fill="#3BFFC0">D10~</text>
+        <text x="473" y="47" fill="#3BFFC0">D11~</text><text x="503" y="47">D12</text>
+        <text x="533" y="47">D13</text><text x="563" y="47" fill="#94A3B8">GND</text>
+        <text x="593" y="47" fill="#FCD34D">AREF</text>
+      </g>
+      <!-- ANALOG PINS BOTTOM -->
+      <text x="260" y="302" fill="#FB923C" font-size="9.5" font-weight="700" text-anchor="middle">── ANALOG PINS A0–A5 (10-bit ADC → 0 to 1023) ──</text>
+      <g stroke-dasharray="3,2" stroke-width="1.2">
+        <line x1="143" y1="285" x2="143" y2="291" stroke="#FB923C"/>
+        <line x1="183" y1="285" x2="183" y2="291" stroke="#FB923C"/>
+        <line x1="223" y1="285" x2="223" y2="291" stroke="#FB923C"/>
+        <line x1="263" y1="285" x2="263" y2="291" stroke="#FB923C"/>
+        <line x1="303" y1="285" x2="303" y2="291" stroke="#38BDF8"/>
+        <line x1="343" y1="285" x2="343" y2="291" stroke="#FCD34D"/>
+      </g>
+      <g fill="#A8B4CC" font-size="8.5" text-anchor="middle">
+        <text x="143" y="280">A0</text><text x="183" y="280">A1</text><text x="223" y="280">A2</text>
+        <text x="263" y="280">A3</text><text x="303" y="280" fill="#38BDF8">A4/SDA</text>
+        <text x="343" y="280" fill="#FCD34D">A5/SCL</text>
+      </g>
+      <!-- POWER PINS right -->
+      <text x="620" y="100" fill="#F87171" font-size="9" font-weight="700">POWER</text>
+      <g fill="#A8B4CC" font-size="8.5">
+        <text x="618" y="120">VIN</text><line x1="614" y1="117" x2="608" y2="117" stroke="#F87171" stroke-width="1.5"/>
+        <text x="618" y="137">GND</text><line x1="614" y1="134" x2="608" y2="134" stroke="#94A3B8" stroke-width="1.5"/>
+        <text x="618" y="154">5V</text><line x1="614" y1="151" x2="608" y2="151" stroke="#F87171" stroke-width="1.5"/>
+        <text x="618" y="171">3.3V</text><line x1="614" y1="168" x2="608" y2="168" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="618" y="188">RST</text><line x1="614" y1="185" x2="608" y2="185" stroke="#FCD34D" stroke-width="1.5"/>
+      </g>
+      <!-- BUS annotations -->
+      <rect x="130" y="190" width="110" height="55" rx="6" fill="rgba(251,146,60,.08)" stroke="rgba(251,146,60,.3)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="185" y="208" fill="#FB923C" font-size="9" font-weight="700" text-anchor="middle">I²C Bus</text>
+      <text x="185" y="222" fill="#A8B4CC" font-size="8" text-anchor="middle">SDA → A4</text>
+      <text x="185" y="235" fill="#A8B4CC" font-size="8" text-anchor="middle">SCL → A5</text>
+      <rect x="255" y="190" width="130" height="55" rx="6" fill="rgba(74,222,128,.08)" stroke="rgba(74,222,128,.3)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="320" y="208" fill="#4ADE80" font-size="9" font-weight="700" text-anchor="middle">UART (Serial)</text>
+      <text x="320" y="222" fill="#A8B4CC" font-size="8" text-anchor="middle">TX → D1 · RX → D0</text>
+      <text x="320" y="235" fill="#A8B4CC" font-size="8" text-anchor="middle">Serial Monitor</text>
+      <rect x="400" y="190" width="140" height="55" rx="6" fill="rgba(56,189,248,.08)" stroke="rgba(56,189,248,.3)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="470" y="208" fill="#38BDF8" font-size="9" font-weight="700" text-anchor="middle">SPI Bus</text>
+      <text x="470" y="222" fill="#A8B4CC" font-size="8" text-anchor="middle">MOSI:D11 · MISO:D12</text>
+      <text x="470" y="235" fill="#A8B4CC" font-size="8" text-anchor="middle">SCK:D13 · SS:D10</text>
+      <!-- PWM legend -->
+      <circle cx="130" cy="58" r="5" fill="#3BFFC0" opacity=".7"/>
+      <text x="140" y="62" fill="#3BFFC0" font-size="8">= PWM capable pin (490–980 Hz)</text>
+    </svg>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <div class="callout-body">
+      <div class="callout-title">Arduino Uno R3 — Spec Summary</div>
+      <div class="callout-text">MCU: ATmega328P · Clock: 16 MHz · Flash: 32 KB · SRAM: 2 KB · EEPROM: 1 KB · Digital I/O: 14 (6 PWM) · Analog inputs: 6 (10-bit ADC) · Operating voltage: 5V · Input: 7–12V · Max pin current: 40 mA · Communication: UART, SPI, I²C · USB: Type-B. <a href="https://docs.arduino.cc/hardware/uno-rev3/" target="_blank" class="ext">Full spec sheet</a></div>
+    </div>
+  </div>
+
+  <!-- ESP32 -->
+  <h3>ESP32 (Espressif) — The IoT Workhorse</h3>
+  <div class="prose">
+    <p>The ESP32 is the most important board you will learn. A dual-core 240 MHz Xtensa LX6 processor, 520 KB SRAM, built-in Wi-Fi 802.11 b/g/n, Bluetooth Classic, and BLE — all for $5–8. It can be programmed with Arduino IDE, MicroPython, or Espressif's native IDF. Nothing else at this price point comes close for IoT prototyping.</p>
+    <p><a href="https://randomnerdtutorials.com/getting-started-with-esp32/" target="_blank" class="ext">Random Nerd Tutorials — ESP32 Getting Started Guide</a> · <a href="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf" target="_blank" class="ext">Official Datasheet PDF</a></p>
+  </div>
+
+  <div class="pin-diagram">
+    <div class="board-diagram-title">ESP32 DOIT DevKit V1 — Pinout (38-pin)</div>
+    <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace" font-size="9">
+      <!-- Board -->
+      <rect x="200" y="15" width="340" height="290" rx="12" fill="#1A1A3A" stroke="#2A2A5A" stroke-width="2"/>
+      <!-- WROOM module -->
+      <rect x="240" y="35" width="260" height="85" rx="6" fill="#111133" stroke="#333366" stroke-width="1.5"/>
+      <text x="370" y="73" fill="#3BFFC0" font-size="11" font-weight="700" text-anchor="middle">ESP32-WROOM-32</text>
+      <text x="370" y="90" fill="#6A7A99" font-size="9" text-anchor="middle">240 MHz Dual-Core · Wi-Fi · BT · BLE</text>
+      <text x="370" y="108" fill="#475569" font-size="8" text-anchor="middle">520 KB SRAM · 4 MB Flash</text>
+      <!-- Antenna bump -->
+      <rect x="216" y="42" width="24" height="44" rx="4" fill="#0D0D22" stroke="#222244" stroke-width="1"/>
+      <text x="228" y="72" fill="#3BFFC0" font-size="7" text-anchor="middle" transform="rotate(-90,228,72)">ANT</text>
+      <!-- USB micro -->
+      <rect x="338" y="286" width="64" height="18" rx="4" fill="#2A3A4A" stroke="#3A5A6A" stroke-width="1"/>
+      <text x="370" y="299" fill="#6A7A99" font-size="8" text-anchor="middle">USB</text>
+
+      <!-- LEFT PINS (18 total, split layout) -->
+      <text x="15" y="150" fill="#38BDF8" font-size="9" font-weight="700">LEFT SIDE</text>
+      <g fill="#A8B4CC" font-size="8.5">
+        <text x="60" y="140">3.3V</text><line x1="198" y1="137" x2="210" y2="137" stroke="#F87171" stroke-width="2"/>
+        <text x="60" y="156">GND</text><line x1="198" y1="153" x2="210" y2="153" stroke="#94A3B8" stroke-width="2"/>
+        <text x="42" y="172">D15 / HSPI SS</text><line x1="198" y1="169" x2="210" y2="169" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="60" y="188">D2 (LED)</text><line x1="198" y1="185" x2="210" y2="185" stroke="#3BFFC0" stroke-width="1.5"/>
+        <text x="52" y="204">D4 / ADC2_0</text><line x1="198" y1="201" x2="210" y2="201" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="42" y="220">D16 / UART2 RX</text><line x1="198" y1="217" x2="210" y2="217" stroke="#4ADE80" stroke-width="1.5"/>
+        <text x="42" y="236">D17 / UART2 TX</text><line x1="198" y1="233" x2="210" y2="233" stroke="#4ADE80" stroke-width="1.5"/>
+        <text x="42" y="252">D5 / VSPI SS</text><line x1="198" y1="249" x2="210" y2="249" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="42" y="268">D18 / VSPI SCK</text><line x1="198" y1="265" x2="210" y2="265" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="34" y="284">D19 / VSPI MISO</text><line x1="198" y1="281" x2="210" y2="281" stroke="#38BDF8" stroke-width="1.5"/>
+      </g>
+
+      <!-- RIGHT PINS -->
+      <text x="565" y="150" fill="#FB923C" font-size="9" font-weight="700">RIGHT SIDE</text>
+      <g fill="#A8B4CC" font-size="8.5">
+        <text x="560" y="140">EN / RST</text><line x1="542" y1="137" x2="556" y2="137" stroke="#FCD34D" stroke-width="1.5"/>
+        <text x="560" y="156">SVP / A0</text><line x1="542" y1="153" x2="556" y2="153" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="560" y="172">SVN / A3</text><line x1="542" y1="169" x2="556" y2="169" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="560" y="188">D34 / A6 (input only)</text><line x1="542" y1="185" x2="556" y2="185" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="560" y="204">D35 / A7 (input only)</text><line x1="542" y1="201" x2="556" y2="201" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="560" y="220">D32 / A4 / Touch9</text><line x1="542" y1="217" x2="556" y2="217" stroke="#A78BFA" stroke-width="1.5"/>
+        <text x="560" y="236">D33 / A5 / Touch8</text><line x1="542" y1="233" x2="556" y2="233" stroke="#A78BFA" stroke-width="1.5"/>
+        <text x="560" y="252">D25 / A18 / DAC1</text><line x1="542" y1="249" x2="556" y2="249" stroke="#FCD34D" stroke-width="1.5"/>
+        <text x="560" y="268">D26 / A19 / DAC2</text><line x1="542" y1="265" x2="556" y2="265" stroke="#FCD34D" stroke-width="1.5"/>
+        <text x="560" y="284">D27 / A17 / Touch7</text><line x1="542" y1="281" x2="556" y2="281" stroke="#A78BFA" stroke-width="1.5"/>
+      </g>
+
+      <!-- Inner legend box -->
+      <rect x="218" y="148" width="304" height="130" rx="6" fill="rgba(0,0,0,.35)"/>
+      <text x="370" y="167" fill="#6A7A99" font-size="8.5" text-anchor="middle" font-weight="700">GPIO CAPABILITIES</text>
+      <text x="230" y="184" fill="#FB923C" font-size="8">🟠 18× ADC channels (12-bit, 0–4095)</text>
+      <text x="230" y="199" fill="#FCD34D" font-size="8">🟡 2× DAC channels — D25, D26</text>
+      <text x="230" y="214" fill="#A78BFA" font-size="8">🟣 10× Capacitive Touch — T0–T9</text>
+      <text x="230" y="229" fill="#38BDF8" font-size="8">🔵 SPI: VSPI (default) + HSPI</text>
+      <text x="230" y="244" fill="#4ADE80" font-size="8">🟢 UART: 3× (UART0/1/2)</text>
+      <text x="230" y="259" fill="#3BFFC0" font-size="8">⚡ PWM: all GPIOs (16 ch, 0–40 MHz)</text>
+      <text x="230" y="274" fill="#F87171" font-size="8">⚠️ D34, D35, VP, VN = input only</text>
+    </svg>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📌</div>
+    <div class="callout-body">
+      <div class="callout-title">ESP32 Key Specs</div>
+      <div class="callout-text">CPU: Xtensa LX6 dual-core @ up to 240 MHz · SRAM: 520 KB · Flash: 4 MB (typical) · Wi-Fi: 802.11 b/g/n 2.4 GHz · Bluetooth: Classic + BLE 4.2 · GPIO: 36 usable · ADC: 18 ch (12-bit) · DAC: 2 ch (8-bit) · Touch: 10 capacitive · UART: 3 · SPI: 4 (2 usable by user) · I²C: 2 · I²S: 2 · PWM: 16 channels on any GPIO · Operating: 3.3V · Current draw: ~80 mA idle, ~240 mA with Wi-Fi TX.</div>
+    </div>
+  </div>
+
+  <!-- STM32 -->
+  <h3>STM32 (STMicroelectronics) — The Professional's MCU</h3>
+  <div class="prose">
+    <p>The STM32 family is where hobbyist meets professional. Built on the <strong>ARM Cortex-M</strong> architecture, STM32 devices power consumer electronics, medical devices, and industrial automation. The most accessible entry point: the <strong>STM32F103C8T6 "Blue Pill"</strong> and the official <strong>NUCLEO development boards</strong>.</p>
+    <p>STM32 is 32-bit (vs Arduino's 8-bit), runs at 72–480 MHz depending on variant, has hardware floating-point — essential for signal processing and control — and deterministic timing via hardware timers. Programmed with <strong>STM32CubeIDE</strong>, or the Arduino IDE with STM32 core. <a href="https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html" target="_blank" class="ext">STM32 Family Overview</a></p>
+  </div>
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-title">STM32F103C8T6 "Blue Pill" Specs</div>
+      <ul class="blist" style="margin-top:8px">
+        <li>ARM Cortex-M3 @ 72 MHz · 32-bit</li>
+        <li>64–128 KB Flash · 20 KB SRAM</li>
+        <li>37 GPIO pins · 10 ADC channels (12-bit)</li>
+        <li>3× USART · 2× SPI · 2× I²C · CAN bus</li>
+        <li>4× 16-bit timers + 1× 32-bit general timer</li>
+        <li>USB Full-speed device mode built in</li>
+        <li>~$2 — cheapest capable 32-bit MCU available</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">When to Choose STM32</div>
+      <ul class="blist" style="margin-top:8px">
+        <li><strong>Precise timing</strong> — motor control, DAQ, PID loops</li>
+        <li><strong>Hardware FPU</strong> — DSP, sensor fusion, Kalman filter</li>
+        <li><strong>Building a product</strong> — not a prototype</li>
+        <li><strong>Low power sleep</strong> — &lt;1 µA in Stop mode</li>
+        <li><strong>DMA</strong> — high-speed data transfer without CPU</li>
+        <li><strong>Multiple buses simultaneously</strong> — SPI + I²C + UART + PWM</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RASPBERRY PI -->
+  <h3>Raspberry Pi — The Linux Single-Board Computer</h3>
+  <div class="prose">
+    <p>The Raspberry Pi is not a microcontroller — it's a <strong>full Linux single-board computer</strong>. It runs Raspberry Pi OS (Debian-based), has a desktop environment, runs Python/Node.js/C++, and connects to monitors, keyboards, and the internet like any laptop.</p>
+    <p>In IoT, the Pi plays specific roles: <strong>IoT gateway</strong> (aggregates data from multiple MCU nodes), <strong>local server</strong> (runs MQTT broker, InfluxDB, Grafana), <strong>vision system</strong> (camera + OpenCV), or <strong>edge AI</strong> (TensorFlow Lite). It should not be the first choice for simple sensor reading — that's what MCUs are for. <a href="https://www.raspberrypi.com/documentation/" target="_blank" class="ext">Raspberry Pi Official Documentation</a></p>
+  </div>
+  <div class="callout warning">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Critical: Raspberry Pi GPIO is 3.3V Only</div>
+      <div class="callout-text">Pi GPIO pins are <strong>3.3V logic and cannot tolerate 5V signals</strong>. Applying 5V will permanently damage the GPIO. Max 16 mA per pin, 50 mA total across all GPIO. No built-in ADC — use an external MCP3008 via SPI. For real-time GPIO control, Pi is unreliable due to Linux OS scheduling — use an MCU for time-critical tasks.</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <h3>Board Comparison Table</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>Arduino Uno</th><th>ESP32</th><th>STM32 (Blue Pill)</th><th>Raspberry Pi 5</th></tr></thead>
+      <tbody>
+        <tr><td>Architecture</td><td>8-bit AVR</td><td>32-bit Xtensa LX6</td><td>32-bit ARM Cortex-M3</td><td>64-bit ARM Cortex-A76</td></tr>
+        <tr><td>Clock Speed</td><td>16 MHz</td><td>240 MHz (dual-core)</td><td>72 MHz</td><td>2.4 GHz (quad-core)</td></tr>
+        <tr><td>RAM</td><td>2 KB SRAM</td><td>520 KB SRAM</td><td>20 KB SRAM</td><td>4–8 GB LPDDR4X</td></tr>
+        <tr><td>Flash / Storage</td><td>32 KB</td><td>4 MB</td><td>64–128 KB</td><td>microSD (32 GB+)</td></tr>
+        <tr><td>Wi-Fi</td><td><span class="cross">✗</span> None</td><td><span class="check">✓</span> 802.11 b/g/n</td><td><span class="cross">✗</span> Needs module</td><td><span class="check">✓</span> 802.11ac dual-band</td></tr>
+        <tr><td>Bluetooth</td><td><span class="cross">✗</span> None</td><td><span class="check">✓</span> Classic + BLE</td><td><span class="cross">✗</span> Needs module</td><td><span class="check">✓</span> BT 5.0 + BLE</td></tr>
+        <tr><td>ADC Resolution</td><td>10-bit (6 ch)</td><td>12-bit (18 ch)</td><td>12-bit (10 ch)</td><td>None built-in</td></tr>
+        <tr><td>Operating Voltage</td><td>5V logic</td><td>3.3V logic</td><td>3.3V logic</td><td>3.3V GPIO (5V power)</td></tr>
+        <tr><td>Real-Time Control</td><td><span class="check">✓</span> Excellent</td><td><span class="check">✓</span> Excellent</td><td><span class="check">✓</span> Excellent + FPU</td><td><span class="cross">✗</span> Unreliable (Linux)</td></tr>
+        <tr><td>Power (active)</td><td>~50 mA</td><td>~80–240 mA</td><td>~30–50 mA</td><td>~3,000–5,000 mA</td></tr>
+        <tr><td>Cost (approx)</td><td>$5–25</td><td>$4–10</td><td>$2–8</td><td>$60–80</td></tr>
+        <tr><td>Best For</td><td>Learning, basic I/O</td><td>IoT nodes, Wi-Fi</td><td>Control systems, products</td><td>Gateway, AI, cameras</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">🎯</div>
+    <div class="callout-body">
+      <div class="callout-title">Workshop Recommendation</div>
+      <div class="callout-text">Start with <strong>Arduino Uno</strong> to grasp fundamental I/O with zero abstraction. Move to <strong>ESP32</strong> for everything internet-connected — it's your primary IoT tool. Use <strong>STM32</strong> for industrial-grade precision control. Use <strong>Raspberry Pi</strong> as the hub or server in multi-device systems. These are not competing choices — they're complementary tools in a professional toolkit.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">Hardware selection follows from requirements: <strong>What does this device sense? How far must data travel? How long must it run on battery? How much processing does it need?</strong> Answer those four questions first. The right board becomes obvious — you're not choosing a favourite, you're matching a tool to a job.</div>
+  </div>
+</section>
+
+<!-- ═══ §4 SOFTWARE & PLATFORMS ═══ -->
+<section class="section" id="software">
+  <div class="section-header">
+    <div class="section-number">04</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-software">Software &amp; Platforms</span>
+      <h2 class="section-title">Firmware, IDEs &amp; Cloud:<br>The Complete Software Stack</h2>
+      <p class="section-subtitle">From the language you write code in, to the IDE you compile with, to the cloud platform that receives and visualizes your data — here is everything you need to understand the software side of IoT.</p>
+    </div>
+  </div>
+
+  <h3>Firmware Language Options</h3>
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-tag" style="background:rgba(56,189,248,.15);color:var(--accent4)">DOMINANT</div>
+      <div class="card-title">Arduino C/C++</div>
+      <div class="card-text">Based on C++11 with a simplified standard library. Compiles to highly efficient machine code. Direct hardware access. Largest community, most tutorials. Works on Arduino, ESP32, STM32, and beyond. Your primary language for this workshop.</div>
+    </div>
+    <div class="card">
+      <div class="card-tag" style="background:rgba(74,222,128,.15);color:var(--green)">FRIENDLY</div>
+      <div class="card-title">MicroPython</div>
+      <div class="card-text">Python 3 re-implemented for microcontrollers. Interactive REPL directly on device — test code without uploading. Slower than C++ but much faster to prototype. Runs on ESP32, Raspberry Pi Pico, STM32. <a href="https://micropython.org" target="_blank" class="ext">micropython.org</a></div>
+    </div>
+    <div class="card">
+      <div class="card-tag" style="background:rgba(167,139,250,.15);color:var(--accent3)">BEGINNER</div>
+      <div class="card-title">CircuitPython</div>
+      <div class="card-text">Adafruit's MicroPython fork. Drag-and-drop programming — copy <code>code.py</code> onto the board's USB drive, it runs immediately. No IDE required. Superb for classrooms and workshops. <a href="https://circuitpython.org" target="_blank" class="ext">circuitpython.org</a></div>
+    </div>
+  </div>
+
+  <!-- ARDUINO PROGRAMMING DEEP DIVE -->
+  <h3>Arduino C/C++ — Comprehensive Programming Reference</h3>
+  <div class="callout info">
+    <div class="callout-icon">📘</div>
+    <div class="callout-body">
+      <div class="callout-title">Official Reference</div>
+      <div class="callout-text">Complete Arduino language reference: <a href="https://www.arduino.cc/reference/en/" target="_blank" class="ext">arduino.cc/reference/en</a>. This section is a structured subset for systematic learning.</div>
+    </div>
+  </div>
+
+  <h4>The Two Required Functions</h4>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">structure.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'structure.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// Every Arduino sketch requires exactly these two functions.</span>
+<span class="cm">// There are no exceptions.</span>
+
+<span class="tp">int</span> ledPin = <span class="num">13</span>;   <span class="cm">// Global variables: accessible in both functions</span>
+<span class="tp">int</span> counter = <span class="num">0</span>;
+
+<span class="cm">// ── setup() ─────────────────────────────────────────────────────────</span>
+<span class="cm">// Runs ONCE when the board powers on or resets.</span>
+<span class="cm">// Use for: pinMode(), Serial.begin(), library init, one-time config.</span>
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);       <span class="cm">// Open serial communication</span>
+  <span class="fn">pinMode</span>(ledPin, OUTPUT);    <span class="cm">// Configure pin 13 as output</span>
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Board started!"</span>);
+}
+
+<span class="cm">// ── loop() ──────────────────────────────────────────────────────────</span>
+<span class="cm">// Runs FOREVER after setup() completes. Never stops.</span>
+<span class="cm">// This is where your program lives.</span>
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(ledPin, HIGH);  <span class="cm">// LED ON</span>
+  <span class="fn">delay</span>(<span class="num">1000</span>);                  <span class="cm">// Wait 1 second</span>
+  <span class="fn">digitalWrite</span>(ledPin, LOW);   <span class="cm">// LED OFF</span>
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+  counter++;
+  <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"Blink #"</span>);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(counter);
+}</pre>
+  </div>
+
+  <h4>Data Types, Variables &amp; Control Flow</h4>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">fundamentals.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'fundamentals.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// ─── DATA TYPES ──────────────────────────────────────────────────────</span>
+<span class="tp">int</span>           a = <span class="num">42</span>;        <span class="cm">// 16-bit signed: -32768 to 32767</span>
+<span class="tp">unsigned int</span>  b = <span class="num">60000</span>;    <span class="cm">// 16-bit unsigned: 0 to 65535</span>
+<span class="tp">long</span>          c = <span class="num">100000L</span>;  <span class="cm">// 32-bit signed integer</span>
+<span class="tp">float</span>         d = <span class="num">3.14</span>;     <span class="cm">// 32-bit floating point</span>
+<span class="tp">bool</span>          e = <span class="kw">true</span>;     <span class="cm">// Boolean: true or false</span>
+<span class="tp">char</span>          f = <span class="str">'A'</span>;      <span class="cm">// Single ASCII character</span>
+<span class="tp">byte</span>          g = <span class="num">255</span>;      <span class="cm">// Unsigned 8-bit (0–255), same as uint8_t</span>
+<span class="tp">String</span>        h = <span class="str">"Hello"</span>;  <span class="cm">// Arduino String object (avoid on tiny MCUs)</span>
+
+<span class="cm">// ─── CONSTANTS & MACROS ──────────────────────────────────────────────</span>
+<span class="kw">const</span> <span class="tp">int</span> BUTTON_PIN = <span class="num">2</span>;   <span class="cm">// const: value won't change; CAPS by convention</span>
+<span class="pp">#define</span> BAUD_RATE <span class="num">115200</span>    <span class="cm">// Preprocessor macro — substituted at compile time</span>
+
+<span class="cm">// ─── OPERATORS ───────────────────────────────────────────────────────</span>
+<span class="tp">int</span> x = <span class="num">10</span> + <span class="num">5</span>;           <span class="cm">// Arithmetic: + - * / % (modulo)</span>
+<span class="tp">bool</span> big = (x > <span class="num">12</span>);      <span class="cm">// Comparison: == != > < >= <=</span>
+<span class="tp">bool</span> both = big &amp;&amp; <span class="kw">true</span>;   <span class="cm">// Logical: && (AND)  || (OR)  ! (NOT)</span>
+x += <span class="num">1</span>;  x++;              <span class="cm">// Shorthand increment</span>
+
+<span class="cm">// ─── CONTROL FLOW ────────────────────────────────────────────────────</span>
+<span class="kw">if</span> (x > <span class="num">10</span>) {
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"big"</span>);
+} <span class="kw">else if</span> (x == <span class="num">10</span>) {
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"exactly 10"</span>);
+} <span class="kw">else</span> {
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"small"</span>);
+}
+
+<span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {  <span class="cm">// Classic for-loop</span>
+  <span class="fn">Serial</span>.<span class="fn">println</span>(i);
+}
+
+<span class="tp">int</span> n = <span class="num">5</span>;
+<span class="kw">while</span> (n > <span class="num">0</span>) { n--; }        <span class="cm">// Runs while condition is true</span>
+
+<span class="cm">// ─── FUNCTIONS ────────────────────────────────────────────────────────</span>
+<span class="tp">float</span> <span class="fn">toFahrenheit</span>(<span class="tp">float</span> c) { <span class="cm">// return type, name, parameters</span>
+  <span class="kw">return</span> (c * <span class="num">9.0</span> / <span class="num">5.0</span>) + <span class="num">32.0</span>;
+}
+<span class="kw">void</span> <span class="fn">blinkN</span>(<span class="tp">int</span> pin, <span class="tp">int</span> n) {   <span class="cm">// void = no return value</span>
+  <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="fn">digitalWrite</span>(pin, HIGH); <span class="fn">delay</span>(<span class="num">200</span>);
+    <span class="fn">digitalWrite</span>(pin, LOW);  <span class="fn">delay</span>(<span class="num">200</span>);
+  }
+}
+
+<span class="cm">// ─── ARRAYS ──────────────────────────────────────────────────────────</span>
+<span class="tp">int</span> readings[<span class="num">10</span>];              <span class="cm">// Declare: 10 integers, uninitialized</span>
+<span class="tp">int</span> pins[] = {<span class="num">2</span>,<span class="num">4</span>,<span class="num">6</span>,<span class="num">8</span>,<span class="num">10</span>};    <span class="cm">// Initialize with values</span>
+readings[<span class="num">0</span>] = <span class="fn">analogRead</span>(A0); <span class="cm">// Index starts at 0</span>
+
+<span class="cm">// ─── USEFUL ARDUINO UTILITIES ─────────────────────────────────────────</span>
+<span class="tp">int</span> mapped = <span class="fn">map</span>(readings[<span class="num">0</span>], <span class="num">0</span>, <span class="num">1023</span>, <span class="num">0</span>, <span class="num">180</span>); <span class="cm">// Remap value ranges</span>
+<span class="tp">int</span> clamped = <span class="fn">constrain</span>(mapped, <span class="num">0</span>, <span class="num">180</span>);       <span class="cm">// Clamp within bounds</span>
+<span class="tp">long</span> r = <span class="fn">random</span>(<span class="num">0</span>, <span class="num">100</span>);                        <span class="cm">// Random number 0–99</span></pre>
+  </div>
+
+  <h4>Essential I/O &amp; Timing Functions</h4>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">io_reference.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'io_reference.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// ─── DIGITAL I/O ─────────────────────────────────────────────────────</span>
+<span class="fn">pinMode</span>(<span class="num">7</span>, INPUT);            <span class="cm">// Pin as input (floating — can be noisy)</span>
+<span class="fn">pinMode</span>(<span class="num">7</span>, INPUT_PULLUP);     <span class="cm">// Input with internal 20-50kΩ pull-up resistor</span>
+<span class="fn">pinMode</span>(<span class="num">8</span>, OUTPUT);           <span class="cm">// Pin as output</span>
+<span class="fn">digitalWrite</span>(<span class="num">8</span>, HIGH);        <span class="cm">// Output HIGH (5V on Uno, 3.3V on ESP32)</span>
+<span class="fn">digitalWrite</span>(<span class="num">8</span>, LOW);         <span class="cm">// Output LOW (0V / GND)</span>
+<span class="tp">int</span> state = <span class="fn">digitalRead</span>(<span class="num">7</span>);  <span class="cm">// Read: returns HIGH (1) or LOW (0)</span>
+
+<span class="cm">// ─── ANALOG I/O ──────────────────────────────────────────────────────</span>
+<span class="tp">int</span> raw = <span class="fn">analogRead</span>(A0);     <span class="cm">// Returns 0–1023 (Uno 10-bit) or 0–4095 (ESP32 12-bit)</span>
+<span class="tp">float</span> volts = raw * (<span class="num">3.3</span> / <span class="num">4095.0</span>);  <span class="cm">// Convert raw to voltage (ESP32)</span>
+<span class="fn">analogWrite</span>(<span class="num">9</span>, <span class="num">128</span>);          <span class="cm">// PWM: 0=always off, 255=always on, 128=50% duty</span>
+                               <span class="cm">// Only works on PWM pins (~ on Uno, any on ESP32)</span>
+
+<span class="cm">// ─── TIME FUNCTIONS ───────────────────────────────────────────────────</span>
+<span class="fn">delay</span>(<span class="num">1000</span>);                   <span class="cm">// Block everything for 1000ms. AVOID in real projects.</span>
+<span class="fn">delayMicroseconds</span>(<span class="num">500</span>);       <span class="cm">// Block for 500 microseconds</span>
+<span class="tp">unsigned long</span> ms = <span class="fn">millis</span>(); <span class="cm">// Milliseconds since power-on (wraps ~49 days)</span>
+<span class="tp">unsigned long</span> us = <span class="fn">micros</span>(); <span class="cm">// Microseconds since power-on</span>
+
+<span class="cm">// ─── NON-BLOCKING TIMING (THE RIGHT WAY) ─────────────────────────────</span>
+<span class="cm">// Using delay() blocks everything. Use millis() instead:</span>
+<span class="tp">unsigned long</span> lastToggle = <span class="num">0</span>;
+<span class="tp">bool</span> ledState = <span class="kw">false</span>;
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (<span class="fn">millis</span>() - lastToggle &gt;= <span class="num">500</span>) {  <span class="cm">// Check if 500ms elapsed</span>
+    lastToggle = <span class="fn">millis</span>();
+    ledState = !ledState;
+    <span class="fn">digitalWrite</span>(<span class="num">LED_BUILTIN</span>, ledState);
+  }
+  <span class="cm">// Code here runs freely — no blocking!</span>
+}
+
+<span class="cm">// ─── SERIAL COMMUNICATION ─────────────────────────────────────────────</span>
+<span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);          <span class="cm">// Init: baud must match Serial Monitor setting</span>
+<span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"Temp: "</span>);         <span class="cm">// Print without newline</span>
+<span class="fn">Serial</span>.<span class="fn">println</span>(<span class="num">25.6</span>);          <span class="cm">// Print WITH newline</span>
+<span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"T=%.1f°C\n"</span>, <span class="num">25.6</span>); <span class="cm">// C-style format (ESP32/STM32)</span>
+<span class="kw">if</span> (<span class="fn">Serial</span>.<span class="fn">available</span>()) {      <span class="cm">// Check if input received</span>
+  <span class="tp">char</span> c = <span class="fn">Serial</span>.<span class="fn">read</span>();     <span class="cm">// Read one byte from buffer</span>
+}</pre>
+  </div>
+
+  <h4>Arduino IDE — Setup &amp; Workflow</h4>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Install Arduino IDE 2.x</div><div class="step-text">Download from <a href="https://www.arduino.cc/en/software" target="_blank" class="ext">arduino.cc/en/software</a>. IDE 2 has autocomplete, a debugger, and a built-in library manager. It's a significant upgrade from 1.8.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Add ESP32 Board Support</div><div class="step-text">File → Preferences → Additional Board Manager URLs: paste <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code>. Then Tools → Board Manager → search "esp32" → Install by Espressif.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Install Libraries</div><div class="step-text">Tools → Manage Libraries. For this workshop: <em>DHT sensor library</em> (Adafruit), <em>Adafruit Unified Sensor</em>, <em>MPU6050</em> (Electronic Cats), <em>Adafruit BMP085</em>, <em>Servo</em>, <em>PubSubClient</em> (Nick O'Leary).</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Select Board &amp; Port</div><div class="step-text">Tools → Board → select your board. Tools → Port → select COM port (Windows) or /dev/ttyUSB0 (Linux) or /dev/cu.SLAB_USBtoUART (Mac). If port missing, install <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" class="ext">CP2102 USB driver</a>.</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Upload &amp; Monitor</div><div class="step-text">Ctrl+U to upload. Ctrl+Shift+M to open Serial Monitor — set baud to match your <code>Serial.begin()</code> value. You'll see the device sending data in real time.</div></div></div>
+  </div>
+
+  <h3>Cloud Platforms at a Glance</h3>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-tag" style="background:rgba(74,222,128,.15);color:var(--green)">FREE · QUICK</div><div class="card-title">ThingSpeak</div><div class="card-text">MathWorks' platform. Free: 8 channels, update every 15s. Built-in MATLAB analysis &amp; real-time charts. Best for classroom demos. <a href="https://thingspeak.com" target="_blank" class="ext">thingspeak.com</a></div></div>
+    <div class="card"><div class="card-tag" style="background:rgba(167,139,250,.15);color:var(--accent3)">MQTT · DASHBOARD</div><div class="card-title">Adafruit IO</div><div class="card-text">Drag-and-drop dashboards, MQTT support, triggers and webhooks. Free tier: 30 data pts/min, 30-day history. <a href="https://io.adafruit.com" target="_blank" class="ext">io.adafruit.com</a></div></div>
+    <div class="card"><div class="card-tag" style="background:rgba(56,189,248,.15);color:var(--accent4)">PHONE APP</div><div class="card-title">Blynk</div><div class="card-text">Mobile app with drag-and-drop widgets. Send commands to your hardware from anywhere. No code needed for the UI. <a href="https://blynk.io" target="_blank" class="ext">blynk.io</a></div></div>
+    <div class="card"><div class="card-tag" style="background:rgba(248,113,113,.15);color:var(--red)">SELF-HOSTED</div><div class="card-title">Node-RED + Grafana</div><div class="card-text">Node-RED: visual flow programming on Raspberry Pi. Grafana + InfluxDB: beautiful time-series dashboards. Free, private, powerful. <a href="https://nodered.org" target="_blank" class="ext">nodered.org</a></div></div>
+    <div class="card"><div class="card-tag" style="background:rgba(252,211,77,.15);color:var(--yellow)">ENTERPRISE</div><div class="card-title">AWS IoT Core</div><div class="card-text">Amazon's managed platform. Handles billions of messages. Integrates with Lambda, DynamoDB, S3. Industry production standard. <a href="https://aws.amazon.com/iot-core/" target="_blank" class="ext">aws.amazon.com/iot-core</a></div></div>
+    <div class="card"><div class="card-tag" style="background:rgba(59,255,192,.15);color:var(--accent)">OPEN SOURCE</div><div class="card-title">Home Assistant</div><div class="card-text">3,000+ integrations, automations, dashboards, mobile app. The gold standard for self-hosted home automation. Runs on Pi. <a href="https://www.home-assistant.io" target="_blank" class="ext">home-assistant.io</a></div></div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">The software stack is the bridge between raw sensor values and actionable insight. Arduino C++ gives you total hardware control. Cloud platforms give you scale and visibility. The skill is knowing <strong>where to process data</strong> — edge for speed and privacy, cloud for scale and intelligence. Most real systems use both.</div>
+  </div>
+</section>
+
+<!-- ═══ §5 PROTOCOLS ═══ -->
+<section class="section" id="protocols">
+  <div class="section-header">
+    <div class="section-number">05</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-protocol">Protocols</span>
+      <h2 class="section-title">How Devices Talk:<br>Hardware &amp; Network Protocols</h2>
+      <p class="section-subtitle">Two layers of communication: hardware protocols (chip-to-chip on a board) and network protocols (device-to-cloud across the internet). Both are essential.</p>
+    </div>
+  </div>
+
+  <h3>Hardware Communication Protocols</h3>
+
+  <!-- UART -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(74,222,128,.15);color:#4ADE80;">UART</span>
+      <div><div class="protocol-name">Universal Asynchronous Receiver/Transmitter</div><div class="protocol-nickname">"The old-reliable — simple, universal, no clock needed"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>UART uses just two wires: <strong>TX (Transmit)</strong> and <strong>RX (Receive)</strong>. It's <em>asynchronous</em> — no shared clock. Both devices must pre-agree on a <strong>baud rate</strong> (bits/second). Common: 9600, 115200, 921600 bps. Data is sent one bit at a time, framed by start/stop bits.</p>
+      <p style="margin-top:10px">On ESP32, UART0 is the USB programming port; UART1 and UART2 are free for GPS modules, GSM modems, Bluetooth HC-05 serial modules, and inter-MCU communication. <a href="https://randomnerdtutorials.com/esp32-uart-communication-serial-arduino/" target="_blank" class="ext">ESP32 UART Guide</a></p>
+      <div class="protocol-specs">
+        <span class="spec-pill">2 wires: TX + RX</span><span class="spec-pill">Full duplex</span><span class="spec-pill">No master/slave</span><span class="spec-pill">Point-to-point only</span><span class="spec-pill">Up to ~5 Mbps</span><span class="spec-pill">No addressing</span>
+      </div>
+      <p><strong>Use for:</strong> GPS module, GSM modem, Bluetooth HC-05/06, Serial Monitor debug, MCU-to-MCU link.<br><strong>Watch out:</strong> Baud rate mismatch (garbled data), 5V/3.3V level mismatch (use a level shifter!).</p>
+    </div>
+    <div class="code-wrap" style="margin-top:16px">
+      <div class="code-header"><div><div class="code-lang">Arduino C++</div><div class="code-filename">uart_example.ino</div></div><div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'uart_example.ino')">↓ Download</a></div></div>
+      <pre><span class="cm">// ESP32 UART2 — reading from a GPS or external module</span>
+<span class="cm">// Default pins: RX2=GPIO16, TX2=GPIO17</span>
+<span class="pp">#include</span> <span class="str">&lt;HardwareSerial.h&gt;</span>
+
+HardwareSerial <span class="fn">mySerial</span>(<span class="num">2</span>);  <span class="cm">// UART2 instance</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);                      <span class="cm">// USB debug port</span>
+  mySerial.<span class="fn">begin</span>(<span class="num">9600</span>, SERIAL_8N1, <span class="num">16</span>, <span class="num">17</span>); <span class="cm">// baud, config, RX, TX</span>
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"UART2 ready at 9600 baud"</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (mySerial.<span class="fn">available</span>()) {
+    <span class="tp">String</span> line = mySerial.<span class="fn">readStringUntil</span>(<span class="str">'\n'</span>);
+    <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"Received: "</span>);
+    <span class="fn">Serial</span>.<span class="fn">println</span>(line);
+  }
+  mySerial.<span class="fn">println</span>(<span class="str">"PING"</span>);  <span class="cm">// Send back to device</span>
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- SPI -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(56,189,248,.15);color:#38BDF8;">SPI</span>
+      <div><div class="protocol-name">Serial Peripheral Interface</div><div class="protocol-nickname">"The speed demon — fastest common hardware bus"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>SPI is synchronous and full-duplex. It uses a shared clock (SCK) controlled by the master, MOSI (data to slave), MISO (data from slave), and one <strong>SS/CS (Slave Select)</strong> line per slave — pulled LOW to activate. Multiple slaves can share MOSI/MISO/SCK but each needs its own SS line.</p>
+      <p style="margin-top:10px">It's the fastest hardware protocol — up to 80 MHz on ESP32 — ideal for SD cards, TFT displays, LoRa modules (SX127x), and high-speed ADCs.</p>
+      <div class="protocol-specs">
+        <span class="spec-pill">4 wires: MOSI+MISO+SCK+SS</span><span class="spec-pill">Synchronous</span><span class="spec-pill">Full duplex</span><span class="spec-pill">Master-slave</span><span class="spec-pill">Up to 80 MHz</span><span class="spec-pill">1 SS per slave</span>
+      </div>
+    </div>
+    <!-- SPI timing diagram -->
+    <div class="timing-wrap">
+      <svg viewBox="0 0 660 175" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace" font-size="9">
+        <text x="5" y="28" fill="#94A3B8">CS/SS</text>
+        <text x="5" y="68" fill="#94A3B8">SCK</text>
+        <text x="5" y="108" fill="#94A3B8">MOSI</text>
+        <text x="5" y="148" fill="#94A3B8">MISO</text>
+        <!-- CS -->
+        <polyline points="50,18 80,18 80,32 570,32 570,18 630,18" fill="none" stroke="#4ADE80" stroke-width="2"/>
+        <text x="315" y="27" fill="#4ADE80" font-size="8" text-anchor="middle">ACTIVE LOW — Slave selected</text>
+        <!-- SCK 8 pulses -->
+        <polyline points="50,58 80,58 80,72 128,72 128,58 176,58 176,72 224,72 224,58 272,58 272,72 320,72 320,58 368,58 368,72 416,72 416,58 464,58 464,72 512,72 512,58 560,58 560,72 630,72" fill="none" stroke="#FCD34D" stroke-width="2"/>
+        <!-- MOSI — 8 bits: 1,0,1,1,0,0,1,0 -->
+        <polyline points="50,98 80,98 80,112 128,112 128,98 176,98 176,112 272,112 272,98 368,98 368,112 416,112 416,98 464,98 464,112 512,112 512,98 560,98 630,98" fill="none" stroke="#38BDF8" stroke-width="2"/>
+        <g fill="#38BDF8" font-size="8.5" text-anchor="middle"><text x="104" y="106">1</text><text x="152" y="119">0</text><text x="200" y="106">1</text><text x="248" y="106">1</text><text x="296" y="119">0</text><text x="344" y="119">0</text><text x="392" y="106">1</text><text x="440" y="119">0</text></g>
+        <!-- MISO -->
+        <polyline points="50,138 80,138 80,152 176,152 176,138 224,138 224,152 320,152 320,138 464,138 464,152 512,152 512,138 630,138" fill="none" stroke="#A78BFA" stroke-width="2"/>
+        <!-- markers -->
+        <line x1="80" y1="5" x2="80" y2="160" stroke="#6A7A99" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="570" y1="5" x2="570" y2="160" stroke="#6A7A99" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="65" y="168" fill="#6A7A99" font-size="8">CS↓ start</text>
+        <text x="546" y="168" fill="#6A7A99" font-size="8">CS↑ end</text>
+        <text x="315" y="168" fill="#FCD34D" font-size="8" text-anchor="middle">8 clock pulses = 1 byte transferred</text>
+      </svg>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px">SPI timing — CS goes LOW, master clocks 8 bits synchronously. MOSI = master→slave, MISO = slave→master simultaneously.</div>
+    </div>
+    <div class="code-wrap" style="margin-top:16px">
+      <div class="code-header"><div><div class="code-lang">Arduino C++</div><div class="code-filename">spi_sd_card.ino</div></div><div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'spi_sd_card.ino')">↓ Download</a></div></div>
+      <pre><span class="cm">// SPI — SD card data logging on ESP32</span>
+<span class="cm">// ESP32 VSPI defaults: MOSI=23, MISO=19, SCK=18, SS=5</span>
+<span class="pp">#include</span> <span class="str">&lt;SPI.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;SD.h&gt;</span>
+
+<span class="kw">const</span> <span class="tp">int</span> CS_PIN = <span class="num">5</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="kw">if</span> (!SD.<span class="fn">begin</span>(CS_PIN)) { <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"SD mount failed!"</span>); <span class="kw">return</span>; }
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"SD ready. Writing log..."</span>);
+  File f = SD.<span class="fn">open</span>(<span class="str">"/log.csv"</span>, FILE_WRITE);
+  <span class="kw">if</span> (f) { f.<span class="fn">println</span>(<span class="str">"ms,temperature,humidity"</span>); f.<span class="fn">close</span>(); }
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  File f = SD.<span class="fn">open</span>(<span class="str">"/log.csv"</span>, FILE_APPEND);
+  <span class="kw">if</span> (f) {
+    f.<span class="fn">printf</span>(<span class="str">"%lu,25.4,62.1\n"</span>, <span class="fn">millis</span>());
+    f.<span class="fn">close</span>();
+    <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Row logged."</span>);
+  }
+  <span class="fn">delay</span>(<span class="num">5000</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- I2C -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(251,146,60,.15);color:#FB923C;">I²C</span>
+      <div><div class="protocol-name">Inter-Integrated Circuit</div><div class="protocol-nickname">"The bus — many sensors, only two wires"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>I²C uses <strong>only two wires: SDA (data) and SCL (clock)</strong>. Up to 127 devices share the same two wires, each with a unique 7-bit address. It's synchronous and half-duplex. Typical speeds: 100 kHz (Standard), 400 kHz (Fast), 3.4 MHz (High-Speed).</p>
+      <p style="margin-top:10px">Most popular sensors use I²C: MPU6050 (IMU, 0x68), BMP280 (pressure, 0x76/0x77), SSD1306 OLED (0x3C/0x3D), ADS1115 (ADC, 0x48). Always pull SDA and SCL up to VCC with 4.7kΩ resistors — I²C is open-drain and won't work without them.</p>
+      <div class="protocol-specs">
+        <span class="spec-pill">2 wires: SDA+SCL</span><span class="spec-pill">Synchronous</span><span class="spec-pill">Half duplex</span><span class="spec-pill">Multi-master/slave</span><span class="spec-pill">100–400 kHz typical</span><span class="spec-pill">Up to 127 devices</span>
+      </div>
+    </div>
+    <div class="code-wrap" style="margin-top:16px">
+      <div class="code-header"><div><div class="code-lang">Arduino C++</div><div class="code-filename">i2c_scanner.ino</div></div><div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'i2c_scanner.ino')">↓ Download</a></div></div>
+      <pre><span class="cm">// I²C Scanner — run this first to discover connected device addresses</span>
+<span class="cm">// ESP32 defaults: SDA=GPIO21, SCL=GPIO22</span>
+<span class="pp">#include</span> <span class="str">&lt;Wire.h&gt;</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Wire</span>.<span class="fn">begin</span>();  <span class="cm">// Wire.begin(SDA, SCL) for custom pins on ESP32</span>
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Scanning I²C bus (1–127)..."</span>);
+  <span class="tp">int</span> count = <span class="num">0</span>;
+  <span class="kw">for</span> (<span class="tp">byte</span> addr = <span class="num">1</span>; addr &lt; <span class="num">127</span>; addr++) {
+    <span class="fn">Wire</span>.<span class="fn">beginTransmission</span>(addr);
+    <span class="kw">if</span> (<span class="fn">Wire</span>.<span class="fn">endTransmission</span>() == <span class="num">0</span>) {
+      <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Found device at 0x%02X\n"</span>, addr);
+      count++;
+    }
+  }
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Done. %d device(s) found.\n"</span>, count);
+}
+<span class="kw">void</span> <span class="fn">loop</span>() {}</pre>
+    </div>
+  </div>
+
+  <h3>Network Communication Protocols</h3>
+
+  <!-- WiFi -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(56,189,248,.15);color:#38BDF8;">Wi-Fi</span>
+      <div><div class="protocol-name">IEEE 802.11 b/g/n/ac</div><div class="protocol-nickname">"The highway — fast, familiar, power-hungry"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>Wi-Fi delivers high bandwidth (up to 150 Mbps for 802.11n) at 2.4 GHz or 5 GHz, with 30–100m indoor range. The ESP32 connects to your router like any laptop — enabling HTTP, MQTT, WebSockets, and more with minimal setup.</p>
+      <p style="margin-top:10px"><strong>Power concern:</strong> ESP32 with Wi-Fi TX draws ~240 mA. On a 3000mAh Li-ion, that's ~12 active hours. For battery-powered field sensors, use BLE or LoRa. For mains-powered devices, Wi-Fi is the right default choice.</p>
+      <div class="protocol-specs">
+        <span class="spec-pill">Range: ~50m indoors</span><span class="spec-pill">Speed: up to 150 Mbps</span><span class="spec-pill">Power: ~240 mA TX</span><span class="spec-pill">2.4/5 GHz</span><span class="spec-pill">Full TCP/IP stack</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLE -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(167,139,250,.15);color:#A78BFA;">BLE</span>
+      <div><div class="protocol-name">Bluetooth Low Energy (BT 4.0+)</div><div class="protocol-nickname">"The whisper — battery-sipping, short range"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>BLE was designed for coin-cell-powered sensors transmitting small payloads infrequently. A BLE sensor can run 1–2 years on a CR2032. It operates at 2.4 GHz with 1–3 Mbps data rate and 10–100m range.</p>
+      <p style="margin-top:10px">BLE uses the <strong>GATT model</strong>: devices expose <em>Services</em> (logical groups) containing <em>Characteristics</em> (data values). Your phone reads or writes characteristics from a peripheral. ESP32 can act as BLE server (peripheral) or client (central). Use the free <strong>nRF Connect</strong> app (Android/iOS) to debug BLE devices. <a href="https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/" target="_blank" class="ext">ESP32 BLE Guide</a></p>
+      <div class="protocol-specs">
+        <span class="spec-pill">Range: 10–100m</span><span class="spec-pill">Speed: 1 Mbps</span><span class="spec-pill">Power: ~7–15 mA TX</span><span class="spec-pill">2.4 GHz ISM</span><span class="spec-pill">GATT protocol</span>
+      </div>
+    </div>
+    <div class="code-wrap" style="margin-top:16px">
+      <div class="code-header"><div><div class="code-lang">Arduino C++</div><div class="code-filename">esp32_ble_server.ino</div></div><div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'esp32_ble_server.ino')">↓ Download</a></div></div>
+      <pre><span class="cm">// ESP32 BLE Server — broadcasts a value readable by phone</span>
+<span class="cm">// Use nRF Connect app to scan and read the characteristic</span>
+<span class="pp">#include</span> <span class="str">&lt;BLEDevice.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;BLEServer.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;BLE2902.h&gt;</span>
+
+<span class="pp">#define</span> SERVICE_UUID        <span class="str">"181A"</span>  <span class="cm">// Environmental Sensing</span>
+<span class="pp">#define</span> CHARACTERISTIC_UUID <span class="str">"2A6E"</span>  <span class="cm">// Temperature</span>
+
+BLECharacteristic* pChar;
+
+<span class="kw">class</span> MyCallbacks : <span class="kw">public</span> BLEServerCallbacks {
+  <span class="kw">void</span> <span class="fn">onConnect</span>(BLEServer* s)    { <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Client connected"</span>); }
+  <span class="kw">void</span> <span class="fn">onDisconnect</span>(BLEServer* s) {
+    s-><span class="fn">startAdvertising</span>();
+    <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Disconnected — advertising again"</span>);
+  }
+};
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  BLEDevice::<span class="fn">init</span>(<span class="str">"ESP32-Sensor"</span>);
+  BLEServer* pSrv = BLEDevice::<span class="fn">createServer</span>();
+  pSrv-><span class="fn">setCallbacks</span>(<span class="kw">new</span> MyCallbacks());
+  BLEService* pSvc = pSrv-><span class="fn">createService</span>(SERVICE_UUID);
+  pChar = pSvc-><span class="fn">createCharacteristic</span>(CHARACTERISTIC_UUID,
+    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+  pChar-><span class="fn">addDescriptor</span>(<span class="kw">new</span> <span class="fn">BLE2902</span>());
+  pSvc-><span class="fn">start</span>();
+  pSrv-><span class="fn">getAdvertising</span>()-><span class="fn">start</span>();
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"BLE advertising. Scan with nRF Connect."</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="tp">float</span> temp = <span class="num">25.5</span>;  <span class="cm">// Replace with real sensor read</span>
+  <span class="tp">int16_t</span> t16 = (<span class="tp">int16_t</span>)(temp * <span class="num">100</span>);  <span class="cm">// 2550 = 25.50°C</span>
+  pChar-><span class="fn">setValue</span>((<span class="tp">uint8_t</span>*)&amp;t16, <span class="num">2</span>);
+  pChar-><span class="fn">notify</span>();
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- LoRa -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(252,211,77,.15);color:#FCD34D;">LoRa</span>
+      <div><div class="protocol-name">Long Range (Chirp Spread Spectrum)</div><div class="protocol-nickname">"The long-distance runner — km range on a coin cell"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>LoRa uses proprietary chirp-spread-spectrum modulation (Semtech). It trades throughput (0.3–50 kbps) for extraordinary range — <strong>2–15 km rural, 1–3 km urban</strong> — while drawing only 15–30 mA transmitting. A coin cell can power a LoRa node for over a year with infrequent transmissions.</p>
+      <p style="margin-top:10px"><strong>LoRaWAN</strong> adds a network protocol layer on top: devices → gateways → network server → application server. A single LoRaWAN gateway can cover an entire city. Common hardware: SX1278 (RA-02 module, 433 MHz for Nepal/Asia). <a href="https://github.com/sandeepmistry/arduino-LoRa" target="_blank" class="ext">arduino-LoRa library</a> · <a href="https://www.thethingsnetwork.org" target="_blank" class="ext">The Things Network (TTN)</a></p>
+      <div class="protocol-specs">
+        <span class="spec-pill">Range: 2–15 km</span><span class="spec-pill">Speed: 0.3–50 kbps</span><span class="spec-pill">Power: ~15 mA TX</span><span class="spec-pill">Sub-GHz: 433/868/915 MHz</span><span class="spec-pill">SPI-connected module</span>
+      </div>
+    </div>
+    <div class="code-wrap" style="margin-top:16px">
+      <div class="code-header"><div><div class="code-lang">Arduino C++</div><div class="code-filename">lora_sender.ino</div></div><div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'lora_sender.ino')">↓ Download</a></div></div>
+      <pre><span class="cm">// LoRa Sender — ESP32 + SX1278 (RA-02, 433 MHz)</span>
+<span class="cm">// Install: "LoRa" by Sandeep Mistry from Library Manager</span>
+<span class="pp">#include</span> <span class="str">&lt;SPI.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;LoRa.h&gt;</span>
+
+<span class="pp">#define</span> LORA_NSS  <span class="num">5</span>   <span class="cm">// Chip Select</span>
+<span class="pp">#define</span> LORA_RST  <span class="num">14</span>  <span class="cm">// Reset</span>
+<span class="pp">#define</span> LORA_DIO0 <span class="num">26</span>  <span class="cm">// Interrupt</span>
+<span class="tp">int</span> pktNum = <span class="num">0</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">LoRa</span>.<span class="fn">setPins</span>(LORA_NSS, LORA_RST, LORA_DIO0);
+  <span class="kw">if</span> (!<span class="fn">LoRa</span>.<span class="fn">begin</span>(<span class="num">433E6</span>)) {  <span class="cm">// 433 MHz for Nepal/Asia</span>
+    <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"LoRa init failed!"</span>); <span class="kw">while</span>(<span class="num">1</span>);
+  }
+  <span class="fn">LoRa</span>.<span class="fn">setSpreadingFactor</span>(<span class="num">12</span>);  <span class="cm">// SF12 = max range, min rate</span>
+  <span class="fn">LoRa</span>.<span class="fn">setTxPower</span>(<span class="num">20</span>);           <span class="cm">// 20 dBm = maximum output</span>
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"LoRa ready"</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">LoRa</span>.<span class="fn">beginPacket</span>();
+  <span class="fn">LoRa</span>.<span class="fn">printf</span>(<span class="str">"{\"n\":%d,\"t\":27.3,\"h\":65.0}"</span>, pktNum++);
+  <span class="fn">LoRa</span>.<span class="fn">endPacket</span>();  <span class="cm">// Transmit</span>
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Sent packet #%d\n"</span>, pktNum - <span class="num">1</span>);
+  <span class="fn">delay</span>(<span class="num">5000</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- MQTT -->
+  <div class="protocol-card">
+    <div class="protocol-header">
+      <span class="protocol-badge" style="background:rgba(59,255,192,.15);color:#3BFFC0;">MQTT</span>
+      <div><div class="protocol-name">Message Queuing Telemetry Transport</div><div class="protocol-nickname">"The postal service of IoT — publisher/subscriber model"</div></div>
+    </div>
+    <div class="protocol-body">
+      <p>MQTT runs over TCP/IP and uses a <strong>broker</strong> as a central relay. Devices <strong>publish</strong> messages to <em>topics</em> (like <code>home/bedroom/temp</code>); devices that have <strong>subscribed</strong> to that topic receive them instantly. The publisher and subscriber never talk directly — the broker is the post office.</p>
+      <p style="margin-top:10px">Key features: <strong>QoS levels</strong> (0=at most once, 1=at least once, 2=exactly once), <strong>retained messages</strong> (broker stores last value for new subscribers), <strong>Last Will &amp; Testament</strong> (offline alert), and an incredibly lightweight 2-byte fixed header. <a href="https://mqtt.org" target="_blank" class="ext">mqtt.org</a> · <a href="https://hivemq.com/public-mqtt-broker/" target="_blank" class="ext">Free public broker: HiveMQ</a></p>
+      <div class="protocol-specs">
+        <span class="spec-pill">TCP port 1883</span><span class="spec-pill">TLS port 8883</span><span class="spec-pill">QoS 0/1/2</span><span class="spec-pill">Retained messages</span><span class="spec-pill">Last Will &amp; Testament</span><span class="spec-pill">2-byte header</span>
+      </div>
+    </div>
+    <div class="code-wrap" style="margin-top:16px">
+      <div class="code-header"><div><div class="code-lang">Arduino C++</div><div class="code-filename">esp32_mqtt_sensor.ino</div></div><div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'esp32_mqtt_sensor.ino')">↓ Download</a></div></div>
+      <pre><span class="cm">// ESP32 → DHT22 → MQTT broker (HiveMQ public)</span>
+<span class="cm">// Install: PubSubClient by Nick O'Leary</span>
+<span class="pp">#include</span> <span class="str">&lt;WiFi.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;PubSubClient.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;DHT.h&gt;</span>
+
+<span class="kw">const</span> <span class="tp">char</span>* ssid = <span class="str">"YOUR_SSID"</span>;
+<span class="kw">const</span> <span class="tp">char</span>* pass = <span class="str">"YOUR_PASSWORD"</span>;
+<span class="kw">const</span> <span class="tp">char</span>* broker = <span class="str">"broker.hivemq.com"</span>;
+
+DHT         <span class="fn">dht</span>(<span class="num">4</span>, DHT22);
+WiFiClient  wifi;
+PubSubClient <span class="fn">mqtt</span>(wifi);
+
+<span class="kw">void</span> <span class="fn">mqttCallback</span>(<span class="tp">char</span>* topic, <span class="tp">byte</span>* payload, <span class="tp">unsigned int</span> len) {
+  <span class="tp">String</span> msg = <span class="tp">String</span>((<span class="tp">char</span>*)payload).<span class="fn">substring</span>(<span class="num">0</span>, len);
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"[%s] → %s\n"</span>, topic, msg.<span class="fn">c_str</span>());
+  <span class="kw">if</span> (msg == <span class="str">"ON"</span>)  <span class="fn">digitalWrite</span>(<span class="num">LED_BUILTIN</span>, HIGH);
+  <span class="kw">if</span> (msg == <span class="str">"OFF"</span>) <span class="fn">digitalWrite</span>(<span class="num">LED_BUILTIN</span>, LOW);
+}
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">pinMode</span>(<span class="num">LED_BUILTIN</span>, OUTPUT);
+  dht.<span class="fn">begin</span>();
+  <span class="fn">WiFi</span>.<span class="fn">begin</span>(ssid, pass);
+  <span class="kw">while</span> (<span class="fn">WiFi</span>.<span class="fn">status</span>() != WL_CONNECTED) { <span class="fn">delay</span>(<span class="num">500</span>); <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"."</span>); }
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"\nWiFi OK"</span>);
+  mqtt.<span class="fn">setServer</span>(broker, <span class="num">1883</span>);
+  mqtt.<span class="fn">setCallback</span>(mqttCallback);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="kw">if</span> (!mqtt.<span class="fn">connected</span>()) {
+    <span class="tp">String</span> id = <span class="str">"ESP32-"</span> + <span class="tp">String</span>(<span class="fn">random</span>(<span class="num">0xffff</span>), HEX);
+    <span class="kw">if</span> (mqtt.<span class="fn">connect</span>(id.<span class="fn">c_str</span>())) {
+      mqtt.<span class="fn">subscribe</span>(<span class="str">"workshop/led/ctrl"</span>);
+      <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"MQTT connected"</span>);
+    }
+  }
+  mqtt.<span class="fn">loop</span>();
+
+  <span class="kw">static</span> <span class="tp">unsigned long</span> last = <span class="num">0</span>;
+  <span class="kw">if</span> (<span class="fn">millis</span>() - last > <span class="num">10000</span>) {
+    last = <span class="fn">millis</span>();
+    <span class="tp">float</span> t = dht.<span class="fn">readTemperature</span>(), h = dht.<span class="fn">readHumidity</span>();
+    <span class="kw">if</span> (!<span class="fn">isnan</span>(t)) {
+      <span class="tp">char</span> buf[<span class="num">64</span>];
+      <span class="fn">snprintf</span>(buf, <span class="kw">sizeof</span>(buf), <span class="str">"{\"t\":%.1f,\"h\":%.1f}"</span>, t, h);
+      mqtt.<span class="fn">publish</span>(<span class="str">"workshop/sensor/data"</span>, buf);
+      <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Published: %s\n"</span>, buf);
+    }
+  }
+}</pre>
+    </div>
+  </div>
+
+  <!-- Protocol Comparison Table -->
+  <h3>Protocol Comparison Table</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Protocol</th><th>Layer</th><th>Range</th><th>Speed</th><th>Power</th><th>Best Use Case</th></tr></thead>
+      <tbody>
+        <tr><td>UART</td><td>Hardware</td><td>&lt;1 m cable</td><td>Up to 5 Mbps</td><td>Negligible</td><td>Module/sensor to MCU communication</td></tr>
+        <tr><td>SPI</td><td>Hardware</td><td>&lt;30 cm board</td><td>Up to 80 MHz</td><td>Negligible</td><td>SD cards, displays, LoRa modules</td></tr>
+        <tr><td>I²C</td><td>Hardware</td><td>&lt;1 m board</td><td>100–400 kHz</td><td>Negligible</td><td>Multiple sensors on 2 wires</td></tr>
+        <tr><td>Wi-Fi</td><td>Network</td><td>~50–100 m</td><td>Up to 150 Mbps</td><td>High (~240 mA)</td><td>Mains-powered IoT nodes</td></tr>
+        <tr><td>BLE</td><td>Network</td><td>10–100 m</td><td>1–2 Mbps</td><td>Low (7–15 mA)</td><td>Wearables, beacons, phone-to-device</td></tr>
+        <tr><td>LoRa</td><td>Network</td><td>2–15 km</td><td>0.3–50 kbps</td><td>Very low (15 mA)</td><td>Rural sensors, asset tracking</td></tr>
+        <tr><td>MQTT</td><td>Application</td><td>Internet-wide</td><td>Transport-dependent</td><td>Transport-dependent</td><td>IoT pub/sub over any IP network</td></tr>
+        <tr><td>Zigbee</td><td>Network</td><td>10–100 m mesh</td><td>250 kbps</td><td>Low</td><td>Smart home mesh networks</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">The golden rule: <strong>pick the protocol that barely meets your requirements.</strong> Overspeccing adds power draw and complexity. Your battery-powered field sensor doesn't need Wi-Fi — LoRa is sufficient. Your on-board IMU doesn't need SPI — I²C saves two wires. Constraints select the protocol; you just honour them.</div>
+  </div>
+</section>
+
+<!-- ═══ §6 LIVE DEMO & CODE ═══ -->
+<section class="section" id="demo">
+  <div class="section-header">
+    <div class="section-number">06</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-demo">Live Demo</span>
+      <h2 class="section-title">Workshop Demo Projects:<br>Complete Code &amp; Wiring</h2>
+      <p class="section-subtitle">Everything you need to replicate every demo from today's session — wiring diagrams, complete code, and setup notes. Start with Demo 1, each project builds on the last.</p>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">🌐</div>
+    <div class="callout-body">
+      <div class="callout-title">No Hardware? Use Wokwi Browser Simulator</div>
+      <div class="callout-text">Every sketch below can be simulated at <a href="https://wokwi.com" target="_blank" class="ext">wokwi.com</a> — a full browser-based Arduino/ESP32 simulator with virtual sensors, real compilation, and Serial Monitor. Paste any code, add the matching components, run instantly. No hardware required to start learning.</div>
+    </div>
+  </div>
+
+  <!-- DEMO 1: LED BLINK -->
+  <h3>Demo 1 — LED Blink (Arduino Uno)</h3>
+  <div class="prose"><p>The "Hello, World!" of hardware. Confirms your environment is set up, your board is communicating, and you understand the basic loop. Don't skip it — it rules out a dozen possible problems in 30 seconds.</p></div>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Wiring — External LED</h5>
+      <div class="wire-row"><span class="wire-pin">LED anode (+)</span><span class="wire-data">→ D13 via 220Ω resistor</span></div>
+      <div class="wire-row"><span class="wire-pin">LED cathode (−)</span><span class="wire-gnd">→ GND</span></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px">Or skip wiring — use the built-in LED already connected to D13 on the Uno and ESP32.</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">led_blink.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'led_blink.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// Demo 1: LED Blink — works on Arduino Uno and ESP32</span>
+<span class="pp">#define</span> LED_PIN LED_BUILTIN  <span class="cm">// 13 on Uno, 2 on most ESP32 boards</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">pinMode</span>(LED_PIN, OUTPUT);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"LED Blink Demo — started"</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="fn">digitalWrite</span>(LED_PIN, HIGH);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"LED ON"</span>);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+
+  <span class="fn">digitalWrite</span>(LED_PIN, LOW);
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"LED OFF"</span>);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</pre>
+  </div>
+
+  <!-- DEMO 2: ULTRASONIC -->
+  <h3>Demo 2 — HC-SR04 Ultrasonic Distance Sensor</h3>
+  <div class="prose"><p>Sound travels at ~343 m/s. The sensor emits an ultrasonic burst at 40 kHz via the TRIG pin, then measures how long the ECHO pin stays HIGH. Half that time × speed of sound = distance to object.</p></div>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Wiring (Arduino Uno)</h5>
+      <div class="wire-row"><span class="wire-pin">VCC</span><span class="wire-vcc">→ 5V</span></div>
+      <div class="wire-row"><span class="wire-pin">GND</span><span class="wire-gnd">→ GND</span></div>
+      <div class="wire-row"><span class="wire-pin">TRIG</span><span class="wire-trig">→ D9</span></div>
+      <div class="wire-row"><span class="wire-pin">ECHO</span><span class="wire-echo">→ D10</span></div>
+    </div>
+    <div class="wiring-card">
+      <h5>📌 Wiring (ESP32)</h5>
+      <div class="wire-row"><span class="wire-pin">VCC</span><span class="wire-vcc">→ VIN / 5V rail</span></div>
+      <div class="wire-row"><span class="wire-pin">GND</span><span class="wire-gnd">→ GND</span></div>
+      <div class="wire-row"><span class="wire-pin">TRIG</span><span class="wire-trig">→ GPIO5</span></div>
+      <div class="wire-row"><span class="wire-pin">ECHO</span><span class="wire-echo">→ GPIO18 (use 1kΩ+2kΩ divider!)</span></div>
+      <div style="font-size:10px;color:var(--red);margin-top:6px">⚠️ ECHO outputs 5V. Protect ESP32 3.3V GPIO with a voltage divider.</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">ultrasonic_sensor.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'ultrasonic_sensor.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// HC-SR04 Ultrasonic Distance — works on Uno and ESP32</span>
+<span class="pp">#define</span> TRIG_PIN <span class="num">9</span>
+<span class="pp">#define</span> ECHO_PIN <span class="num">10</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">pinMode</span>(TRIG_PIN, OUTPUT);
+  <span class="fn">pinMode</span>(ECHO_PIN, INPUT);
+}
+
+<span class="tp">float</span> <span class="fn">getDistanceCm</span>() {
+  <span class="cm">// Send 10µs trigger pulse</span>
+  <span class="fn">digitalWrite</span>(TRIG_PIN, LOW);
+  <span class="fn">delayMicroseconds</span>(<span class="num">2</span>);
+  <span class="fn">digitalWrite</span>(TRIG_PIN, HIGH);
+  <span class="fn">delayMicroseconds</span>(<span class="num">10</span>);
+  <span class="fn">digitalWrite</span>(TRIG_PIN, LOW);
+
+  <span class="cm">// Measure echo pulse (30ms timeout = ~5m max range)</span>
+  <span class="tp">long</span> dur = <span class="fn">pulseIn</span>(ECHO_PIN, HIGH, <span class="num">30000</span>);
+  <span class="kw">if</span> (dur == <span class="num">0</span>) <span class="kw">return</span> -<span class="num">1</span>;        <span class="cm">// No echo = out of range</span>
+
+  <span class="cm">// Distance = (343 m/s × time) / 2   →   0.0343 cm/µs</span>
+  <span class="kw">return</span> (dur * <span class="num">0.0343f</span>) / <span class="num">2.0f</span>;
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="tp">float</span> d = <span class="fn">getDistanceCm</span>();
+  <span class="kw">if</span>      (d &lt; <span class="num">0</span>)   <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Out of range!"</span>);
+  <span class="kw">else if</span> (d &lt; <span class="num">10</span>)  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"%.1f cm  ⚠️  VERY CLOSE!\n"</span>, d);
+  <span class="kw">else if</span> (d &lt; <span class="num">30</span>)  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"%.1f cm  NEAR\n"</span>, d);
+  <span class="kw">else</span>               <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"%.1f cm\n"</span>, d);
+  <span class="fn">delay</span>(<span class="num">200</span>);  <span class="cm">// Min 60 ms between readings</span>
+}</pre>
+  </div>
+
+  <!-- DEMO 3: SOIL MOISTURE -->
+  <h3>Demo 3 — Soil Moisture Sensor (Capacitive)</h3>
+  <div class="prose"><p>Capacitive sensors measure soil moisture by detecting changes in capacitance — no metal electrodes in contact with soil, so no corrosion. The raw ADC value decreases as moisture increases (wet soil = lower reading). You must calibrate yours: note the value in dry air and the value submerged in water.</p></div>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Wiring</h5>
+      <div class="wire-row"><span class="wire-pin">VCC</span><span class="wire-vcc">→ 3.3V (or 5V)</span></div>
+      <div class="wire-row"><span class="wire-pin">GND</span><span class="wire-gnd">→ GND</span></div>
+      <div class="wire-row"><span class="wire-pin">AOUT</span><span class="wire-data">→ A0 (Uno) or GPIO34 (ESP32)</span></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px">DOUT (digital threshold) optional → D2 for alarm output</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">soil_moisture.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'soil_moisture.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// Capacitive Soil Moisture Sensor</span>
+<span class="cm">// CALIBRATION: read in dry air → AIR_VALUE; submerged → WATER_VALUE</span>
+<span class="pp">#define</span> SENSOR_PIN A0
+<span class="kw">const</span> <span class="tp">int</span> AIR_VALUE   = <span class="num">620</span>;  <span class="cm">// Adjust for your sensor!</span>
+<span class="kw">const</span> <span class="tp">int</span> WATER_VALUE = <span class="num">310</span>;  <span class="cm">// Adjust for your sensor!</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() { <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>); }
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="tp">int</span> raw = <span class="fn">analogRead</span>(SENSOR_PIN);
+  <span class="tp">int</span> pct = <span class="fn">map</span>(raw, AIR_VALUE, WATER_VALUE, <span class="num">0</span>, <span class="num">100</span>);
+  pct     = <span class="fn">constrain</span>(pct, <span class="num">0</span>, <span class="num">100</span>);
+
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Raw: %4d  |  Moisture: %3d%%"</span>, raw, pct);
+
+  <span class="kw">if</span>      (pct &lt; <span class="num">30</span>) <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"  → 💧 DRY — water now!"</span>);
+  <span class="kw">else if</span> (pct &lt; <span class="num">60</span>) <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"  → ✅ MOIST — OK"</span>);
+  <span class="kw">else</span>               <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"  → 🌊 WET — no watering needed"</span>);
+  <span class="fn">delay</span>(<span class="num">1000</span>);
+}</pre>
+  </div>
+
+  <!-- DEMO 4: MPU6050 -->
+  <h3>Demo 4 — MPU6050 IMU (Accelerometer + Gyroscope via I²C)</h3>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Wiring (ESP32)</h5>
+      <div class="wire-row"><span class="wire-pin">VCC</span><span class="wire-vcc">→ 3.3V</span></div>
+      <div class="wire-row"><span class="wire-pin">GND</span><span class="wire-gnd">→ GND</span></div>
+      <div class="wire-row"><span class="wire-pin">SDA</span><span class="wire-sda">→ GPIO21</span></div>
+      <div class="wire-row"><span class="wire-pin">SCL</span><span class="wire-scl">→ GPIO22</span></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px">I²C address: 0x68 (AD0=LOW) or 0x69 (AD0=HIGH)</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">mpu6050_read.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'mpu6050_read.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// MPU6050 — 3-axis Accelerometer + Gyroscope over I²C</span>
+<span class="cm">// Install: "MPU6050" by Electronic Cats (Library Manager)</span>
+<span class="pp">#include</span> <span class="str">&lt;Wire.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;MPU6050.h&gt;</span>
+
+MPU6050 <span class="fn">mpu</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">Wire</span>.<span class="fn">begin</span>();
+  mpu.<span class="fn">initialize</span>();
+  <span class="fn">Serial</span>.<span class="fn">println</span>(mpu.<span class="fn">testConnection</span>() ? <span class="str">"MPU6050 connected"</span> : <span class="str">"Connection FAILED"</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="tp">int16_t</span> ax, ay, az, gx, gy, gz;
+  mpu.<span class="fn">getMotion6</span>(&amp;ax, &amp;ay, &amp;az, &amp;gx, &amp;gy, &amp;gz);
+
+  <span class="cm">// Raw → physical units</span>
+  <span class="cm">// Accel: divide by 16384 for ±2g range  →  result in g</span>
+  <span class="cm">// Gyro:  divide by 131   for ±250°/s    →  result in °/s</span>
+  <span class="tp">float</span> aX = ax / <span class="num">16384.0f</span>;
+  <span class="tp">float</span> aY = ay / <span class="num">16384.0f</span>;
+  <span class="tp">float</span> aZ = az / <span class="num">16384.0f</span>;
+  <span class="tp">float</span> gX = gx / <span class="num">131.0f</span>;
+  <span class="tp">float</span> gY = gy / <span class="num">131.0f</span>;
+  <span class="tp">float</span> gZ = gz / <span class="num">131.0f</span>;
+
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Accel (g)   X:%6.3f  Y:%6.3f  Z:%6.3f\n"</span>, aX, aY, aZ);
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Gyro (°/s)  X:%7.2f  Y:%7.2f  Z:%7.2f\n\n"</span>, gX, gY, gZ);
+
+  <span class="cm">// Tilt detection: detect if board is tilted more than 30°</span>
+  <span class="tp">float</span> tilt = <span class="fn">atan2</span>(aY, aZ) * <span class="num">180.0f</span> / M_PI;
+  <span class="kw">if</span> (<span class="fn">abs</span>(tilt) &gt; <span class="num">30</span>)
+    <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"⚠️  TILT DETECTED: %.1f°\n"</span>, tilt);
+
+  <span class="fn">delay</span>(<span class="num">500</span>);
+}</pre>
+  </div>
+
+  <!-- DEMO 5: BMP180 -->
+  <h3>Demo 5 — BMP180 Barometric Pressure + Temperature (I²C)</h3>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Wiring (ESP32)</h5>
+      <div class="wire-row"><span class="wire-pin">VCC</span><span class="wire-vcc">→ 3.3V</span></div>
+      <div class="wire-row"><span class="wire-pin">GND</span><span class="wire-gnd">→ GND</span></div>
+      <div class="wire-row"><span class="wire-pin">SDA</span><span class="wire-sda">→ GPIO21</span></div>
+      <div class="wire-row"><span class="wire-pin">SCL</span><span class="wire-scl">→ GPIO22</span></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px">Default I²C address: 0x77. Install: "Adafruit BMP085" library</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">bmp180_read.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'bmp180_read.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// BMP180 — Pressure + Temperature + Altitude via I²C</span>
+<span class="cm">// Install: "Adafruit BMP085 Library" (works for BMP180 too)</span>
+<span class="pp">#include</span> <span class="str">&lt;Wire.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;Adafruit_BMP085.h&gt;</span>
+
+Adafruit_BMP085 <span class="fn">bmp</span>;
+
+<span class="cm">// Kathmandu is ~1400m above sea level.</span>
+<span class="cm">// For accurate altitude, use the actual sea-level pressure for that day.</span>
+<span class="kw">const</span> <span class="tp">float</span> SEA_LEVEL_HPA = <span class="num">1013.25f</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">Wire</span>.<span class="fn">begin</span>();
+  <span class="kw">if</span> (!bmp.<span class="fn">begin</span>()) {
+    <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"BMP180 not found! Check wiring and I²C address."</span>);
+    <span class="kw">while</span> (<span class="num">1</span>);
+  }
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"BMP180 ready\n"</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="tp">float</span> tempC    = bmp.<span class="fn">readTemperature</span>();
+  <span class="tp">long</span>  pressureP = bmp.<span class="fn">readPressure</span>();       <span class="cm">// In Pascals</span>
+  <span class="tp">float</span> pressHPA = pressureP / <span class="num">100.0f</span>;        <span class="cm">// Convert to hPa</span>
+  <span class="tp">float</span> altitude  = bmp.<span class="fn">readAltitude</span>(SEA_LEVEL_HPA * <span class="num">100</span>);
+
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Temperature : %.2f °C\n"</span>,   tempC);
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Pressure    : %.2f hPa\n"</span>,  pressHPA);
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Altitude    : %.1f m\n\n"</span>, altitude);
+  <span class="fn">delay</span>(<span class="num">2000</span>);
+}</pre>
+  </div>
+
+  <!-- DEMO 6: SERVO MOTOR -->
+  <h3>Demo 6 — SG90 Servo Motor</h3>
+  <div class="prose"><p>A servo receives a PWM signal where the <strong>pulse width</strong> (not duty cycle) encodes position: ~0.5ms = 0°, ~1.5ms = 90°, ~2.4ms = 180°. The Arduino <code>Servo</code> library handles all the timing internally.</p></div>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Wiring (Arduino Uno)</h5>
+      <div class="wire-row"><span class="wire-pin">Red (VCC)</span><span class="wire-vcc">→ 5V</span></div>
+      <div class="wire-row"><span class="wire-pin">Brown (GND)</span><span class="wire-gnd">→ GND</span></div>
+      <div class="wire-row"><span class="wire-pin">Yellow (Signal)</span><span class="wire-data">→ D9 (PWM pin)</span></div>
+      <div style="font-size:10px;color:var(--yellow);margin-top:6px">⚡ If servo jitters or resets the board, power it from an external 5V supply rather than the board's 5V pin.</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">servo_sweep.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'servo_sweep.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// SG90 Servo — full sweep + Serial control</span>
+<span class="pp">#include</span> <span class="str">&lt;Servo.h&gt;</span>
+
+<span class="pp">#define</span> SERVO_PIN <span class="num">9</span>
+Servo <span class="fn">myServo</span>;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  myServo.<span class="fn">attach</span>(SERVO_PIN, <span class="num">500</span>, <span class="num">2400</span>); <span class="cm">// min/max pulse µs</span>
+  myServo.<span class="fn">write</span>(<span class="num">90</span>);  <span class="cm">// Start at centre</span>
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Servo ready. Type 0–180 + Enter to position."</span>);
+  <span class="fn">delay</span>(<span class="num">500</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  <span class="cm">// Accept angle from Serial Monitor</span>
+  <span class="kw">if</span> (<span class="fn">Serial</span>.<span class="fn">available</span>()) {
+    <span class="tp">int</span> angle = <span class="fn">Serial</span>.<span class="fn">parseInt</span>();
+    angle = <span class="fn">constrain</span>(angle, <span class="num">0</span>, <span class="num">180</span>);
+    myServo.<span class="fn">write</span>(angle);
+    <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"Moved to %d°\n"</span>, angle);
+  }
+
+  <span class="cm">// Auto-sweep demo (comment out if using Serial control)</span>
+  <span class="kw">for</span> (<span class="tp">int</span> a = <span class="num">0</span>; a &lt;= <span class="num">180</span>; a += <span class="num">3</span>) { myServo.<span class="fn">write</span>(a); <span class="fn">delay</span>(<span class="num">20</span>); }
+  <span class="fn">delay</span>(<span class="num">400</span>);
+  <span class="kw">for</span> (<span class="tp">int</span> a = <span class="num">180</span>; a &gt;= <span class="num">0</span>; a -= <span class="num">3</span>) { myServo.<span class="fn">write</span>(a); <span class="fn">delay</span>(<span class="num">20</span>); }
+  <span class="fn">delay</span>(<span class="num">400</span>);
+}</pre>
+  </div>
+
+  <!-- DEMO 7: ESP32 WEB DASHBOARD -->
+  <h3>Demo 7 — ESP32 Live Web Dashboard (Wi-Fi)</h3>
+  <div class="prose">
+    <p>The capstone demo. The ESP32 reads multiple sensors and hosts its own web server. Open any browser on the same Wi-Fi network, navigate to the ESP32's IP address printed in Serial Monitor, and see live sensor data auto-refreshing every 3 seconds — no cloud, no app, no subscription required.</p>
+  </div>
+  <div class="wiring-grid">
+    <div class="wiring-card">
+      <h5>📌 Sensors Used</h5>
+      <div class="wire-row"><span class="wire-pin">DHT22 DATA</span><span class="wire-data">→ GPIO4</span></div>
+      <div class="wire-row"><span class="wire-pin">HC-SR04 TRIG</span><span class="wire-trig">→ GPIO5</span></div>
+      <div class="wire-row"><span class="wire-pin">HC-SR04 ECHO</span><span class="wire-echo">→ GPIO18</span></div>
+      <div class="wire-row"><span class="wire-pin">Soil Moisture AOUT</span><span class="wire-data">→ GPIO34</span></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px">Add or remove sensors from handleRoot() to match your setup.</div>
+    </div>
+  </div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <div><div class="code-lang">Arduino C++</div><div class="code-filename">esp32_web_dashboard.ino</div></div>
+      <div class="code-actions"><button class="copy-btn" onclick="copyCode(this)">⧉ Copy</button><a class="download-btn" href="#" onclick="downloadCode(this,'esp32_web_dashboard.ino')">↓ Download</a></div>
+    </div>
+    <pre><span class="cm">// ESP32 Live Web Dashboard — serves sensor data as a styled HTML page</span>
+<span class="cm">// Access: open Serial Monitor → copy IP → paste in any browser on same Wi-Fi</span>
+<span class="pp">#include</span> <span class="str">&lt;WiFi.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;WebServer.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;DHT.h&gt;</span>
+
+<span class="kw">const</span> <span class="tp">char</span>* ssid     = <span class="str">"YOUR_SSID"</span>;
+<span class="kw">const</span> <span class="tp">char</span>* password = <span class="str">"YOUR_PASSWORD"</span>;
+
+<span class="pp">#define</span> DHT_PIN      <span class="num">4</span>
+<span class="pp">#define</span> TRIG_PIN     <span class="num">5</span>
+<span class="pp">#define</span> ECHO_PIN     <span class="num">18</span>
+<span class="pp">#define</span> MOISTURE_PIN <span class="num">34</span>
+
+DHT dht(DHT_PIN, DHT22);
+WebServer server(<span class="num">80</span>);
+
+<span class="tp">float</span>  g_temp, g_hum, g_dist;
+<span class="tp">int</span>    g_moisture;
+
+<span class="kw">void</span> <span class="fn">readSensors</span>() {
+  g_temp = dht.<span class="fn">readTemperature</span>();
+  g_hum  = dht.<span class="fn">readHumidity</span>();
+
+  <span class="fn">digitalWrite</span>(TRIG_PIN, LOW);  <span class="fn">delayMicroseconds</span>(<span class="num">2</span>);
+  <span class="fn">digitalWrite</span>(TRIG_PIN, HIGH); <span class="fn">delayMicroseconds</span>(<span class="num">10</span>);
+  <span class="fn">digitalWrite</span>(TRIG_PIN, LOW);
+  <span class="tp">long</span> dur = <span class="fn">pulseIn</span>(ECHO_PIN, HIGH, <span class="num">25000</span>);
+  g_dist = (dur * <span class="num">0.0343f</span>) / <span class="num">2.0f</span>;
+
+  <span class="tp">int</span> raw = <span class="fn">analogRead</span>(MOISTURE_PIN);
+  g_moisture = <span class="fn">constrain</span>(<span class="fn">map</span>(raw, <span class="num">3200</span>, <span class="num">1400</span>, <span class="num">0</span>, <span class="num">100</span>), <span class="num">0</span>, <span class="num">100</span>);
+}
+
+<span class="kw">void</span> <span class="fn">handleRoot</span>() {
+  <span class="fn">readSensors</span>();
+  <span class="tp">String</span> html = <span class="str">"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;"</span>
+    <span class="str">"&lt;meta charset='UTF-8'&gt;"</span>
+    <span class="str">"&lt;meta http-equiv='refresh' content='3'&gt;"</span>  <span class="cm">// Auto-refresh every 3s</span>
+    <span class="str">"&lt;title&gt;ESP32 Dashboard&lt;/title&gt;"</span>
+    <span class="str">"&lt;style&gt;"</span>
+    <span class="str">"body{font-family:monospace;background:#0d1117;color:#e6edf3;"</span>
+    <span class="str">"     display:flex;flex-direction:column;align-items:center;"</span>
+    <span class="str">"     padding:40px;gap:20px;}"</span>
+    <span class="str">"h1{color:#3bffc0;margin-bottom:0;font-size:2rem;}"</span>
+    <span class="str">".grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;"</span>
+    <span class="str">"      max-width:600px;width:100%;}"</span>
+    <span class="str">".card{background:#161b22;border:1px solid #30363d;"</span>
+    <span class="str">"      border-radius:14px;padding:28px 32px;text-align:center;}"</span>
+    <span class="str">".val{font-size:3rem;font-weight:700;color:#3bffc0;}"</span>
+    <span class="str">".lbl{font-size:13px;color:#8b949e;margin-top:8px;}"</span>
+    <span class="str">".ts{font-size:11px;color:#484f58;margin-top:14px;}"</span>
+    <span class="str">"&lt;/style&gt;&lt;/head&gt;&lt;body&gt;"</span>
+    <span class="str">"&lt;h1&gt;⚡ ESP32 Live Dashboard&lt;/h1&gt;"</span>
+    <span class="str">"&lt;div class='grid'&gt;"</span>;
+
+  <span class="cm">// Inject sensor readings dynamically</span>
+  html += <span class="str">"&lt;div class='card'&gt;&lt;div class='val'&gt;"</span> + <span class="fn">String</span>(g_temp,<span class="num">1</span>) + <span class="str">"°C&lt;/div&gt;&lt;div class='lbl'&gt;🌡 Temperature&lt;/div&gt;&lt;/div&gt;"</span>;
+  html += <span class="str">"&lt;div class='card'&gt;&lt;div class='val'&gt;"</span> + <span class="fn">String</span>(g_hum,<span class="num">1</span>)  + <span class="str">"%&lt;/div&gt;&lt;div class='lbl'&gt;💧 Humidity&lt;/div&gt;&lt;/div&gt;"</span>;
+  html += <span class="str">"&lt;div class='card'&gt;&lt;div class='val'&gt;"</span> + <span class="fn">String</span>(g_dist,<span class="num">1</span>) + <span class="str">"cm&lt;/div&gt;&lt;div class='lbl'&gt;📡 Distance&lt;/div&gt;&lt;/div&gt;"</span>;
+  html += <span class="str">"&lt;div class='card'&gt;&lt;div class='val'&gt;"</span> + <span class="fn">String</span>(g_moisture) + <span class="str">"%&lt;/div&gt;&lt;div class='lbl'&gt;🌱 Soil Moisture&lt;/div&gt;&lt;/div&gt;"</span>;
+
+  html += <span class="str">"&lt;/div&gt;&lt;div class='ts'&gt;Uptime: "</span> + <span class="fn">String</span>(<span class="fn">millis</span>()/<span class="num">1000</span>) +
+          <span class="str">"s &nbsp;·&nbsp; Auto-refreshes every 3s&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"</span>;
+
+  server.<span class="fn">send</span>(<span class="num">200</span>, <span class="str">"text/html"</span>, html);
+}
+
+<span class="kw">void</span> <span class="fn">handleAPI</span>() {
+  <span class="fn">readSensors</span>();
+  <span class="tp">char</span> buf[<span class="num">128</span>];
+  <span class="fn">snprintf</span>(buf, <span class="kw">sizeof</span>(buf),
+    <span class="str">"{\"temp\":%.1f,\"hum\":%.1f,\"dist\":%.1f,\"moisture\":%d,\"uptime\":%lu}"</span>,
+    g_temp, g_hum, g_dist, g_moisture, <span class="fn">millis</span>()/<span class="num">1000</span>);
+  server.<span class="fn">send</span>(<span class="num">200</span>, <span class="str">"application/json"</span>, buf);
+}
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">Serial</span>.<span class="fn">begin</span>(<span class="num">115200</span>);
+  <span class="fn">pinMode</span>(TRIG_PIN, OUTPUT);
+  <span class="fn">pinMode</span>(ECHO_PIN, INPUT);
+  dht.<span class="fn">begin</span>();
+
+  <span class="fn">WiFi</span>.<span class="fn">begin</span>(ssid, password);
+  <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"Connecting to WiFi"</span>);
+  <span class="kw">while</span> (<span class="fn">WiFi</span>.<span class="fn">status</span>() != WL_CONNECTED) { <span class="fn">delay</span>(<span class="num">500</span>); <span class="fn">Serial</span>.<span class="fn">print</span>(<span class="str">"."</span>); }
+
+  <span class="fn">Serial</span>.<span class="fn">printf</span>(<span class="str">"\n\n✅ Connected! Open browser → http://%s\n"</span>,
+               <span class="fn">WiFi</span>.<span class="fn">localIP</span>().<span class="fn">toString</span>().<span class="fn">c_str</span>());
+
+  server.<span class="fn">on</span>(<span class="str">"/"</span>,    handleRoot);  <span class="cm">// HTML dashboard</span>
+  server.<span class="fn">on</span>(<span class="str">"/api"</span>, handleAPI);   <span class="cm">// JSON API for integration</span>
+  server.<span class="fn">begin</span>();
+  <span class="fn">Serial</span>.<span class="fn">println</span>(<span class="str">"Web server listening on port 80."</span>);
+}
+
+<span class="kw">void</span> <span class="fn">loop</span>() {
+  server.<span class="fn">handleClient</span>();  <span class="cm">// Process incoming HTTP requests</span>
+}</pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">Accessing the Dashboard &amp; JSON API</div>
+      <div class="callout-text">After uploading: open Serial Monitor (115200 baud) and wait for "Connected! Open browser → http://192.168.x.x". Navigate to that address on any device on the same Wi-Fi. The <code>/api</code> endpoint returns JSON you can poll from Python, Node-RED, or any HTTP client — useful for piping data into InfluxDB or Grafana.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">This is the moment everything connects. Physical sensors → microcontroller → Wi-Fi → web browser. No cloud service, no subscription, no app. A $6 chip serving live sensor data to any browser on the network. <strong>From electrons to a web interface — all on 150 lines of code.</strong> That's what IoT looks like in practice.</div>
+  </div>
+</section>
+
+<!-- ═══ §7 SECURITY & ETHICS (GROUP WORK) ═══ -->
+<section class="section" id="ethics">
+  <div class="section-header">
+    <div class="section-number">07</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-ethics">Security &amp; Ethics</span>
+      <h2 class="section-title">The Dark Side of Connected Devices:<br>Group Workshop Activity</h2>
+      <p class="section-subtitle">This section is a structured group exercise. Analyze real-world attack scenarios, debate privacy implications, and leave with concrete security habits you can implement from day one as an IoT developer.</p>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Real Incident — The Mirai Botnet (October 2016)</div>
+      <div class="callout-text">Malware called Mirai infected over 300,000 IoT devices — security cameras, DVRs, home routers — by scanning the internet for devices still using <strong>factory default passwords</strong>. These compromised devices were weaponized to launch one of the largest DDoS attacks in history, taking down Dyn DNS and making Twitter, Netflix, Reddit, CNN, and GitHub inaccessible for hours across the US East Coast. The entire attack relied on a hardcoded list of just 61 default username/password pairs. The fix was trivially simple: change the default password. <a href="https://www.cloudflare.com/learning/ddos/famous-ddos-attacks/" target="_blank" class="ext">Cloudflare — Famous DDoS Attacks</a> · <a href="https://www.wired.com/story/mirai-botnet-minecraft-scams-hacks/" target="_blank" class="ext">Wired — The Mirai Story</a></div>
+    </div>
+  </div>
+
+  <h3>Group Activity — 4 Scenarios, 4 Groups</h3>
+  <div class="prose"><p>Split into 4 groups. Analyze your scenario for 8 minutes — identify the attack vector, map the impact, and propose mitigations. Present in 3 minutes. The facilitator synthesizes the common thread across all four.</p></div>
+
+  <div class="group-card">
+    <div class="group-header">
+      <div class="group-num" style="background:rgba(248,113,113,.15);color:#F87171;">G1</div>
+      <div><div class="group-title">Group 1 — The Smart Home Breach</div><div class="group-sub">Topic: Hardcoded credentials &amp; factory defaults</div></div>
+    </div>
+    <div class="group-task">
+      <strong>Scenario:</strong> A company ships 200,000 Wi-Fi doorbell cameras. Every unit has the same hardcoded username <code>admin</code> and password <code>admin123</code>. A researcher buys one, reads the firmware from the flash chip, finds the credentials in plaintext. Posts them publicly. Within 48 hours, an automated scanner has logged into every device on the internet.<br><br>
+      <strong>Discuss:</strong><br>
+      1. Beyond privacy invasion — what else can an attacker do with access to 200,000 cameras?<br>
+      2. What three engineering decisions at the <em>design stage</em> would have prevented this entirely?<br>
+      3. Who bears legal responsibility — the manufacturer, the retailer, or the consumer?<br>
+      4. As a buyer: what questions would you ask before purchasing any connected device?
+    </div>
+  </div>
+
+  <div class="group-card">
+    <div class="group-header">
+      <div class="group-num" style="background:rgba(252,211,77,.15);color:#FCD34D;">G2</div>
+      <div><div class="group-title">Group 2 — The Unencrypted Hospital</div><div class="group-sub">Topic: Plaintext data transmission in critical infrastructure</div></div>
+    </div>
+    <div class="group-task">
+      <strong>Scenario:</strong> A hospital deploys 50 IoT patient monitors. They transmit vital signs — heart rate, blood pressure, SpO₂ — over unencrypted HTTP to the nurses' central dashboard. A researcher sitting on the hospital guest Wi-Fi runs Wireshark and captures complete patient records in plaintext — including names matched to room numbers.<br><br>
+      <strong>Discuss:</strong><br>
+      1. Who might be motivated to intercept this data — and for what purpose?<br>
+      2. Beyond HTTPS, list three additional security layers that should exist.<br>
+      3. What regulations apply here? Research: <a href="https://www.hhs.gov/hipaa/index.html" target="_blank" class="ext">HIPAA</a>, <a href="https://www.iso.org/isoiec-27001-information-security.html" target="_blank" class="ext">ISO 27001</a>, Nepal's Electronic Transactions Act.<br>
+      4. More dangerous: an attacker who reads the data, or one who <em>modifies</em> the readings?
+    </div>
+  </div>
+
+  <div class="group-card">
+    <div class="group-header">
+      <div class="group-num" style="background:rgba(56,189,248,.15);color:#38BDF8;">G3</div>
+      <div><div class="group-title">Group 3 — The Data-Hungry Fridge</div><div class="group-sub">Topic: Data ownership, consent, and re-identification</div></div>
+    </div>
+    <div class="group-task">
+      <strong>Scenario:</strong> A smart refrigerator startup collects usage data: door open/close times, temperature settings, and camera snapshots when items run low. Their ToS (page 47 of 80) states they may share "aggregated, anonymized data with partners." Insurers purchase this data and use it as a lifestyle indicator for setting health premiums.<br><br>
+      <strong>Discuss:</strong><br>
+      1. Is "aggregated and anonymized" truly safe from re-identification? Research: <a href="https://en.wikipedia.org/wiki/Data_re-identification" target="_blank" class="ext">data re-identification attacks</a>.<br>
+      2. What data rights should users have? Research: <a href="https://gdpr.eu/right-to-erasure/" target="_blank" class="ext">GDPR's right to erasure</a>.<br>
+      3. Is this legal? Is it ethical? Are legal and ethical the same thing here?<br>
+      4. If you were building this product: what would you collect, what would you refuse to collect, and why?
+    </div>
+  </div>
+
+  <div class="group-card">
+    <div class="group-header">
+      <div class="group-num" style="background:rgba(167,139,250,.15);color:#A78BFA;">G4</div>
+      <div><div class="group-title">Group 4 — The Unupdatable Sensor</div><div class="group-sub">Topic: No OTA update mechanism &amp; end-of-life devices</div></div>
+    </div>
+    <div class="group-task">
+      <strong>Scenario:</strong> 100,000 water-quality IoT sensors are deployed across a country. Three years later, a critical vulnerability is found in the TLS library they use — an attacker can intercept and silently modify sensor readings. The devices have no OTA update mechanism. Physical access is required to patch each unit. 60% are in remote mountain regions.<br><br>
+      <strong>Discuss:</strong><br>
+      1. What happens if drinking water quality readings can be falsified by an attacker?<br>
+      2. Why do manufacturers skip OTA update capability? (Hint: cost, complexity, liability, battery life.)<br>
+      3. Design a minimal OTA system for an ESP32. Research: <a href="https://randomnerdtutorials.com/esp32-over-the-air-ota-programming/" target="_blank" class="ext">ESP32 ArduinoOTA guide</a>.<br>
+      4. Who should regulate this gap — government mandates, industry bodies, or market forces?
+    </div>
+  </div>
+
+  <h3>The Three Deadly Sins of IoT Security</h3>
+  <div class="cards cards-3">
+    <div class="card" style="border-color:rgba(248,113,113,.35);">
+      <div class="card-icon">🔑</div>
+      <div class="card-title" style="color:#F87171;">Sin 1 — Hardcoded Credentials</div>
+      <div class="card-text">Never ship a device with a fixed username/password. Generate unique per-device credentials at manufacturing, or force a password change on first boot. Treat any factory credential as a known public exploit — because it will eventually become one.</div>
+    </div>
+    <div class="card" style="border-color:rgba(252,211,77,.35);">
+      <div class="card-icon">🔓</div>
+      <div class="card-title" style="color:#FCD34D;">Sin 2 — Plaintext Transmission</div>
+      <div class="card-text">HTTP → HTTPS. MQTT → MQTT over TLS (port 8883). Any data over a network must be encrypted. Use TLS 1.2+ minimum. Free certificates via Let's Encrypt. If it's too inconvenient to encrypt, the system isn't ready to deploy.</div>
+    </div>
+    <div class="card" style="border-color:rgba(56,189,248,.35);">
+      <div class="card-icon">🔄</div>
+      <div class="card-title" style="color:#38BDF8;">Sin 3 — No Update Path</div>
+      <div class="card-text">All software has bugs. All bugs may become vulnerabilities. Build OTA update capability from day one — it's far cheaper than a hardware recall. ESP32's <code>ArduinoOTA</code> library adds this in under 20 lines. There is no excuse for skipping it.</div>
+    </div>
+  </div>
+
+  <h3>Developer Security Checklist — Implement From Day 1</h3>
+  <ul class="blist">
+    <li><strong>Change all default passwords</strong> on every device, every router, every MQTT broker you deploy</li>
+    <li><strong>Use TLS/HTTPS everywhere</strong> — MQTT on port 8883, HTTP API calls over HTTPS, never plain HTTP</li>
+    <li><strong>Never expose devices directly to the internet</strong> — use VPN, reverse proxy (nginx), or a managed cloud broker</li>
+    <li><strong>Store credentials in config, not in code</strong> — never commit passwords or API keys to GitHub. Use <code>.env</code> files or device-specific config storage</li>
+    <li><strong>Validate all incoming data</strong> — buffer overflows, integer overflows, and injection attacks hit firmware too, not just web servers</li>
+    <li><strong>Implement OTA firmware updates</strong> — plan for it before deployment, not after a vulnerability is found</li>
+    <li><strong>Collect minimum data</strong> — every data point you store is a liability if breached. Only gather what you demonstrably use</li>
+    <li><strong>Know the law that applies to you</strong> — Nepal's Electronic Transactions Act 2063, GDPR if touching EU user data, HIPAA for health data</li>
+    <li><strong>Disable unused services</strong> — if your device doesn't need Telnet, SSH, or FTP, don't run them. Every open port is an attack surface</li>
+    <li><strong>Plan for end-of-life</strong> — what happens to user data when your product is discontinued? State this policy before launch</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-icon">📚</div>
+    <div class="callout-body">
+      <div class="callout-title">Security Reference Resources</div>
+      <div class="callout-text">
+        <a href="https://owasp.org/www-project-internet-of-things/" target="_blank" class="ext">OWASP IoT Top 10</a> — authoritative list of IoT vulnerability categories, with mitigations.<br>
+        <a href="https://www.iotsecurityfoundation.org/best-practice-guidelines/" target="_blank" class="ext">IoT Security Foundation Best Practice Guidelines</a> — comprehensive enterprise framework.<br>
+        <a href="https://randomnerdtutorials.com/esp32-over-the-air-ota-programming/" target="_blank" class="ext">ESP32 OTA Updates Guide</a> — implement firmware updates over Wi-Fi in minutes.<br>
+        <a href="https://mosquitto.org/documentation/authentication-methods/" target="_blank" class="ext">Mosquitto MQTT TLS Authentication</a> — secure your local MQTT broker.
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">Security is not a feature you add at the end. It is a design constraint from the first whiteboard session. The cheapest security fix is the one made before any code is written. Build with the assumption that <strong>if it is connected, someone will attempt to access it.</strong> Your job is to make that attempt not worth their time.</div>
+  </div>
+</section>
+
+
+<!-- ═══ §8 PROJECTS & COMMUNITY ═══ -->
+<section class="section" id="wrapup">
+  <div class="section-header">
+    <div class="section-number">08</div>
+    <div class="section-title-group">
+      <span class="section-tag tag-wrapup">What's Next</span>
+      <h2 class="section-title">Project Paths, Resources<br>&amp; Community</h2>
+      <p class="section-subtitle">The workshop ends here. Your IoT journey does not. Here is your complete roadmap — from today's first blink to building systems that solve real problems for real people.</p>
+    </div>
+  </div>
+
+  <!-- STARTER KIT SHOPPING LIST -->
+  <h3>Your Starter Kit — What to Buy First</h3>
+  <div class="prose"><p>Build this kit in order. Each layer adds new capability. Total cost for the full kit: roughly $25–40 USD depending on supplier. Recommended sources for Nepal: <a href="https://www.daraz.com.np" target="_blank" class="ext">Daraz</a>, <a href="https://www.aliexpress.com" target="_blank" class="ext">AliExpress</a> (2–3 week shipping), or local electronics shops around New Road, Kathmandu.</p></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Component</th><th>Qty</th><th>Purpose</th><th>Approx. Cost</th></tr></thead>
+      <tbody>
+        <tr><td>ESP32 DevKit V1</td><td>2</td><td>Primary IoT MCU — Wi-Fi, BLE, 38 pins</td><td>$5–8 each</td></tr>
+        <tr><td>Arduino Uno R3</td><td>1</td><td>Learning board — clean 5V, simple</td><td>$5–15</td></tr>
+        <tr><td>Half-size breadboard</td><td>2</td><td>Prototyping without soldering</td><td>$1–2 each</td></tr>
+        <tr><td>Jumper wires (M-M, M-F, F-F)</td><td>1 set each</td><td>Connections between board and sensors</td><td>$2–3/set</td></tr>
+        <tr><td>LED assortment (red/green/blue/yellow)</td><td>20 pcs</td><td>Output indicators, basic demos</td><td>$1–2</td></tr>
+        <tr><td>Resistor kit (220Ω, 1kΩ, 10kΩ)</td><td>1 kit</td><td>Current limiting, pull-ups, dividers</td><td>$2–3</td></tr>
+        <tr><td>DHT22 Temperature &amp; Humidity</td><td>1</td><td>Environmental sensing (more accurate than DHT11)</td><td>$2–4</td></tr>
+        <tr><td>HC-SR04 Ultrasonic</td><td>1</td><td>Distance measurement</td><td>$1–2</td></tr>
+        <tr><td>Capacitive Soil Moisture sensor</td><td>1</td><td>Soil sensing — more durable than resistive</td><td>$1–3</td></tr>
+        <tr><td>SG90 Servo Motor</td><td>1</td><td>Actuator, positional control</td><td>$2–3</td></tr>
+        <tr><td>MPU6050 IMU module</td><td>1</td><td>3-axis accel + gyro over I²C</td><td>$1–3</td></tr>
+        <tr><td>SSD1306 OLED 0.96" I²C</td><td>1</td><td>Local display for sensor values</td><td>$2–4</td></tr>
+        <tr><td>Relay module (1-channel, 5V)</td><td>1</td><td>Switch real-world AC loads from logic level</td><td>$1–2</td></tr>
+        <tr><td>USB cables (Type-A to Micro-B)</td><td>2</td><td>Power and programming for boards</td><td>$1–2 each</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LEARNING PATH -->
+  <h3>Your Learning Path — Level by Level</h3>
+  <div class="prose"><p>Pick a project just above your current skill level. Discomfort during learning is a signal you are growing. Move to the next level only when you can explain the current one to someone else.</p></div>
+
+  <div class="level-path">
+    <div class="level-item l1">
+      <div class="level-title">🟢 Level 1 — Sensor Output (Beginner, Week 1–2)</div>
+      <div class="level-text">Read a sensor, display data on Serial Monitor. No network. Focus: wiring, pinMode, analogRead, Serial.print, understanding units and calibration.</div>
+      <div class="level-examples">Projects: LED blink · DHT22 temperature display · Ultrasonic ruler · Soil moisture percentage · LDR light meter · Button debouncing</div>
+    </div>
+    <div class="level-item l2">
+      <div class="level-title">🔵 Level 2 — Local Reaction (Beginner+, Week 3–4)</div>
+      <div class="level-text">Sensor input drives an actuator output. The device makes a decision locally. Focus: if/else logic, PWM, servo control, relay switching, millis() non-blocking timing.</div>
+      <div class="level-examples">Projects: Auto plant watering (soil → pump) · Motion-activated alarm (PIR → buzzer) · Temperature fan controller · Night light (LDR → LED with PWM fade) · Distance alarm with buzzer</div>
+    </div>
+    <div class="level-item l3">
+      <div class="level-title">🟣 Level 3 — Connected Device (Intermediate, Month 2)</div>
+      <div class="level-text">Data leaves the device. Someone can monitor or control from anywhere. Focus: Wi-Fi, MQTT, HTTP, WebServer, BLE, cloud platform integration.</div>
+      <div class="level-examples">Projects: Room climate monitor on ThingSpeak · ESP32 live web dashboard · MQTT-based remote LED control · BLE sensor readable by phone · Telegram bot alert for sensor threshold</div>
+    </div>
+    <div class="level-item l4">
+      <div class="level-title">🟠 Level 4 — System Design (Intermediate+, Month 3–4)</div>
+      <div class="level-text">Multiple devices, a backend, automation rules, and a user interface used by someone other than you. Focus: architecture, reliability, database, dashboards, security hardening.</div>
+      <div class="level-examples">Projects: Multi-room air quality network → Grafana · Smart greenhouse (auto-watering + alerts + mobile) · Asset tracker (ESP32 + GPS + LoRa) · Home automation dashboard with Home Assistant</div>
+    </div>
+    <div class="level-item l5">
+      <div class="level-title">🔴 Level 5 — Real-World Deployment (Advanced, Month 5+)</div>
+      <div class="level-text">PCB design, enclosures, power optimization, OTA updates, production security, deployment in the field. Solving a problem for others at scale. This is where IoT becomes engineering.</div>
+      <div class="level-examples">Projects: Air quality monitoring network for a neighbourhood · Flood early-warning system for a river valley · Precision agriculture sensor network with LoRaWAN · Industrial predictive maintenance system</div>
+    </div>
+  </div>
+
+  <!-- STARTER PROJECTS -->
+  <h3>6 Projects to Build This Week</h3>
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-icon">🌱</div>
+      <div class="card-title">Smart Plant Monitor</div>
+      <div class="card-text">Soil moisture + DHT22 + ESP32. Sends a Telegram notification when the plant needs water. Total cost under $15. Genuinely useful, genuinely your first real IoT product.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💧</div>
+      <div class="card-title">Water Tank Level Alert</div>
+      <div class="card-text">HC-SR04 aimed down into an overhead water tank + ESP32. Alerts via MQTT or Telegram when level falls below threshold. Extremely practical in South Asian homes.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌬️</div>
+      <div class="card-title">Air Quality Monitor</div>
+      <div class="card-text">MQ-135 + BMP280 + SSD1306 OLED + ESP32. Log CO₂/VOC readings and pressure to InfluxDB, visualize on Grafana. A real tool, not a toy.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚪</div>
+      <div class="card-title">Door/Window Alert</div>
+      <div class="card-text">Reed switch + ESP32 deep sleep + MQTT push notification. Runs weeks on a single 18650 cell. One of the highest-utility-to-complexity ratios in IoT.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌤️</div>
+      <div class="card-title">Personal Weather Station</div>
+      <div class="card-text">DHT22 + BMP280 + rain gauge tipping bucket + ESP32. Upload to Weather Underground or self-host with Grafana. Useful real data for your exact neighbourhood.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏫</div>
+      <div class="card-title">Classroom CO₂ Monitor</div>
+      <div class="card-text">SCD40 NDIR CO₂ sensor + LED traffic light + ESP32. High CO₂ (&gt;1000 ppm) measurably degrades cognitive performance. A CO₂ monitor that tells you when to open windows is genuinely useful in any classroom or office.</div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY -->
+  <h3>Community — Where to Learn, Share, and Get Unstuck</h3>
+  <div class="community-grid">
+    <div class="community-card">
+      <div class="community-platform" style="color:var(--accent4)">Forum</div>
+      <div class="community-name">Arduino Forum</div>
+      <div class="community-desc">The official Arduino community. Decades of solved problems. Search before posting — your question has almost certainly been answered. Respectful, patient, beginner-friendly.</div>
+      <div class="community-meta">
+        <span class="community-stat">🌐 forum.arduino.cc</span>
+        <span class="community-stat">📅 Since 2005</span>
+      </div>
+    </div>
+    <div class="community-card">
+      <div class="community-platform" style="color:var(--accent3)">Reddit</div>
+      <div class="community-name">r/esp32 &amp; r/arduino</div>
+      <div class="community-desc">Active subreddits for project showcases, troubleshooting, and component recommendations. Great for seeing what others are building and getting quick opinions.</div>
+      <div class="community-meta">
+        <span class="community-stat">🌐 reddit.com/r/esp32</span>
+        <span class="community-stat">👥 200k+ members</span>
+      </div>
+    </div>
+    <div class="community-card">
+      <div class="community-platform" style="color:var(--green)">Tutorial Site</div>
+      <div class="community-name">Random Nerd Tutorials</div>
+      <div class="community-desc">The single best site for ESP32/ESP8266 tutorials. Step-by-step guides with full code, wiring diagrams, and photos for hundreds of projects. Consistently maintained and accurate.</div>
+      <div class="community-meta">
+        <span class="community-stat">🌐 randomnerdtutorials.com</span>
+        <span class="community-stat">📚 500+ guides</span>
+      </div>
+    </div>
+    <div class="community-card">
+      <div class="community-platform" style="color:var(--hardware)">Platform</div>
+      <div class="community-name">Hackster.io</div>
+      <div class="community-desc">Project-sharing platform with tens of thousands of IoT and electronics builds. Each project has full documentation, code, and wiring. Great for discovering what's possible at each skill level.</div>
+      <div class="community-meta">
+        <span class="community-stat">🌐 hackster.io</span>
+        <span class="community-stat">🛠 600k+ projects</span>
+      </div>
+    </div>
+    <div class="community-card">
+      <div class="community-platform" style="color:var(--accent)">Open Source</div>
+      <div class="community-name">GitHub</div>
+      <div class="community-desc">Where all the libraries live. When a sensor isn't working, read the library source code — the answer is usually there. Star the repos you depend on. Open issues respectfully. Contribute when you can.</div>
+      <div class="community-meta">
+        <span class="community-stat">🌐 github.com</span>
+        <span class="community-stat">🔧 Millions of IoT repos</span>
+      </div>
+    </div>
+    <div class="community-card">
+      <div class="community-platform" style="color:var(--accent5)">Video</div>
+      <div class="community-name">Andreas Spiess (YouTube)</div>
+      <div class="community-desc">Deep technical IoT content from a Swiss engineer. LoRa, MQTT, Home Assistant, power optimization, and more — explained with exceptional clarity and rigor. One of the best IoT educators online.</div>
+      <div class="community-meta">
+        <span class="community-stat">🌐 youtube.com/@AndreasSpiess</span>
+        <span class="community-stat">📺 "The Guy with the Swiss Accent"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXTERNAL RESOURCES GRID -->
+  <h3>Essential External Resources</h3>
+  <div class="resource-grid">
+    <a href="https://randomnerdtutorials.com" target="_blank" class="resource-card">
+      <div class="resource-icon">📖</div>
+      <div class="resource-name">Random Nerd Tutorials</div>
+      <div class="resource-desc">Best ESP32/Arduino tutorial site. Step-by-step, full code, wiring diagrams.</div>
+      <div class="resource-url">randomnerdtutorials.com</div>
+    </a>
+    <a href="https://wokwi.com" target="_blank" class="resource-card">
+      <div class="resource-icon">🖥️</div>
+      <div class="resource-name">Wokwi Simulator</div>
+      <div class="resource-desc">Browser-based Arduino/ESP32 simulator. Test without hardware. Share via link.</div>
+      <div class="resource-url">wokwi.com</div>
+    </a>
+    <a href="https://microsoft.github.io/IoT-For-Beginners" target="_blank" class="resource-card">
+      <div class="resource-icon">🏫</div>
+      <div class="resource-name">MS IoT for Beginners</div>
+      <div class="resource-desc">Free 24-lesson curriculum. Full projects in C++ and MicroPython. Self-paced.</div>
+      <div class="resource-url">microsoft.github.io/IoT-For-Beginners</div>
+    </a>
+    <a href="https://docs.arduino.cc" target="_blank" class="resource-card">
+      <div class="resource-icon">📗</div>
+      <div class="resource-name">Arduino Docs</div>
+      <div class="resource-desc">Official language reference, hardware docs, built-in library API. Authoritative.</div>
+      <div class="resource-url">docs.arduino.cc</div>
+    </a>
+    <a href="https://docs.espressif.com/projects/arduino-esp32" target="_blank" class="resource-card">
+      <div class="resource-icon">📘</div>
+      <div class="resource-name">ESP32 Arduino Docs</div>
+      <div class="resource-desc">Official Espressif docs for Arduino-ESP32 core. API reference, pin maps, examples.</div>
+      <div class="resource-url">docs.espressif.com</div>
+    </a>
+    <a href="https://nodered.org/docs/" target="_blank" class="resource-card">
+      <div class="resource-icon">🔗</div>
+      <div class="resource-name">Node-RED Docs</div>
+      <div class="resource-desc">Visual flow programming for IoT. Connect sensors to dashboards without complex code.</div>
+      <div class="resource-url">nodered.org/docs</div>
+    </a>
+    <a href="https://mqtt.org" target="_blank" class="resource-card">
+      <div class="resource-icon">📡</div>
+      <div class="resource-name">MQTT.org</div>
+      <div class="resource-desc">Official MQTT specification, client libraries, and broker list. Protocol deep dives.</div>
+      <div class="resource-url">mqtt.org</div>
+    </a>
+    <a href="https://www.thethingsnetwork.org" target="_blank" class="resource-card">
+      <div class="resource-icon">🌐</div>
+      <div class="resource-name">The Things Network</div>
+      <div class="resource-desc">Free LoRaWAN network. Map of global gateways. Community-owned infrastructure.</div>
+      <div class="resource-url">thethingsnetwork.org</div>
+    </a>
+    <a href="https://lastminuteengineers.com" target="_blank" class="resource-card">
+      <div class="resource-icon">⚡</div>
+      <div class="resource-name">Last Minute Engineers</div>
+      <div class="resource-desc">Deep technical tutorials on sensors, modules, and protocols. Well-written datasheets with diagrams.</div>
+      <div class="resource-url">lastminuteengineers.com</div>
+    </a>
+    <a href="https://www.adafruit.com/learn" target="_blank" class="resource-card">
+      <div class="resource-icon">🐍</div>
+      <div class="resource-name">Adafruit Learning System</div>
+      <div class="resource-desc">Thousands of guides for Adafruit hardware and CircuitPython. Excellent for beginners.</div>
+      <div class="resource-url">learn.adafruit.com</div>
+    </a>
+    <a href="https://owasp.org/www-project-internet-of-things/" target="_blank" class="resource-card">
+      <div class="resource-icon">🔒</div>
+      <div class="resource-name">OWASP IoT Top 10</div>
+      <div class="resource-desc">Authoritative IoT vulnerability list. Essential reading before you deploy anything.</div>
+      <div class="resource-url">owasp.org/IoT</div>
+    </a>
+    <a href="https://io.adafruit.com" target="_blank" class="resource-card">
+      <div class="resource-icon">☁️</div>
+      <div class="resource-name">Adafruit IO</div>
+      <div class="resource-desc">Beginner IoT cloud: dashboards, MQTT, triggers. Free tier generous enough for most projects.</div>
+      <div class="resource-url">io.adafruit.com</div>
+    </a>
+  </div>
+
+  <!-- FINAL SUMMARY -->
+  <h3>What You Learned Today — The Full Picture</h3>
+  <div class="cards cards-2">
+    <div class="card">
+      <div class="card-title">🧠 Concepts Covered</div>
+      <ul class="blist" style="margin-top:8px">
+        <li>The 4-layer IoT architecture: Sense → Process → Transmit → Act</li>
+        <li>GPIO, ADC, PWM, UART, SPI, I²C — what they are and when to use each</li>
+        <li>Arduino C++ fundamentals: types, control flow, functions, libraries</li>
+        <li>setup() / loop() programming model and non-blocking timing with millis()</li>
+        <li>Wi-Fi, BLE, and LoRa trade-offs (range, power, data rate)</li>
+        <li>MQTT publish/subscribe pattern and broker architecture</li>
+        <li>Edge vs cloud processing decisions</li>
+        <li>The three deadly sins of IoT security and how to avoid them</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">🔌 Hardware Touched</div>
+      <ul class="blist" style="margin-top:8px">
+        <li>Arduino Uno R3 — 8-bit AVR, the foundational learning board</li>
+        <li>ESP32 DevKit — dual-core 240 MHz, Wi-Fi + BLE, the IoT workhorse</li>
+        <li>DHT22 — temperature and humidity over digital protocol</li>
+        <li>HC-SR04 — ultrasonic distance via pulse timing</li>
+        <li>MPU6050 — 6-axis IMU over I²C</li>
+        <li>BMP180 — barometric pressure and altitude over I²C</li>
+        <li>Capacitive soil moisture — analog ADC reading with calibration</li>
+        <li>SG90 servo — PWM-based positional actuator</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">🚀</div>
+    <div class="callout-body">
+      <div class="callout-title">Your Next 7 Days</div>
+      <div class="callout-text">
+        <strong>Day 1:</strong> Get Arduino IDE working. Upload the LED blink sketch. Rule out environment issues.<br>
+        <strong>Day 2–3:</strong> Wire and read a DHT22. Display values on Serial Monitor. Understand ADC and units.<br>
+        <strong>Day 4–5:</strong> Connect ESP32 to your Wi-Fi. Build the web dashboard. Add a second sensor.<br>
+        <strong>Day 6:</strong> Set up a free MQTT broker account. Publish sensor data. Subscribe and watch it arrive.<br>
+        <strong>Day 7:</strong> Pick one Level 2 project that solves a real problem in your home or school. Build it.
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-icon">🎯</div>
+    <div class="takeaway-text">The gap between someone who attended an IoT workshop and someone who builds IoT systems is not knowledge — it is <strong>the first project completed after the workshop ends.</strong> The concepts are now in your head. The tools are in this document. The components are available. The only remaining variable is whether you build something today — or wait until you feel "ready." You are already ready.</div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ── COPY CODE ──────────────────────────────────────────────────────────────
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = '⧉ Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── DOWNLOAD CODE ──────────────────────────────────────────────────────────
+function downloadCode(el, filename) {
+  event.preventDefault();
+  const pre = el.closest('.code-wrap').querySelector('pre');
+  const text = pre.innerText;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ── ACTIVE NAV HIGHLIGHT ───────────────────────────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// ── PROGRESS DOTS UPDATE ───────────────────────────────────────────────────
+const dots = document.querySelectorAll('.progress-dot');
+const sectionIds = ['problem','concepts','hardware','software','protocols','demo','ethics','wrapup'];
+
+const dotObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = sectionIds.indexOf(entry.target.id);
+      dots.forEach((d, i) => {
+        d.style.opacity = i <= idx ? '1' : '0.35';
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => dotObserver.observe(s));
+
+// ── OPEN EXT LINKS IN NEW TAB ─────────────────────────────────────────────
+document.querySelectorAll('a.ext').forEach(a => {
+  a.setAttribute('target', '_blank');
+  a.setAttribute('rel', 'noopener noreferrer');
+});
+
+// ── KEYBOARD SHORTCUT: Ctrl+/ to toggle sidebar ────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+    const sb = document.querySelector('.sidebar');
+    sb.style.display = sb.style.display === 'none' ? '' : 'none';
+  }
+});
+</script>
+</body>
+</html>
