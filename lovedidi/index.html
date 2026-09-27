@@ -793,7 +793,7 @@ async function fetchWeather(){
 //  Strategy: 1) exact callsign  2) prefix in bounding box  3) interpolation
 // ════════════════════════════════════════════════════
 const CALLSIGN_LEG1 = 'IGO1162';   // 6E1162 IndiGo KTM→DEL
-const CALLSIGN_LEG2 = 'AIC';       // Air India DEL→LHR (number TBD — prefix fallback)
+const CALLSIGN_LEG2 = 'AIC161';       // Air India DEL→LHR (number TBD — prefix fallback)
 
 async function queryOpenSky(url){
   const hdrs=await tokens.authHeaders();
@@ -828,13 +828,12 @@ async function pollOpenSky(){
     let best=null;
 
     // ── PRIMARY: exact callsign lookup ───────────────
-    if(ph==='leg1'){
-      const data=await queryOpenSky(
-        `https://opensky-network.org/api/states/all?callsign=${CALLSIGN_LEG1}`
-      );
-      if(data.states?.length){
-        best=bestState(data.states, ipos, cs=>cs===CALLSIGN_LEG1);
-      }
+    const exactCs = ph==='leg1' ? CALLSIGN_LEG1 : CALLSIGN_LEG2;
+    const data1=await queryOpenSky(
+      `https://opensky-network.org/api/states/all?callsign=${exactCs}`
+    );
+    if(data1.states?.length){
+      best=bestState(data1.states, ipos, cs=>cs===exactCs);
     }
 
     // ── FALLBACK: bounding box + prefix match ─────────
